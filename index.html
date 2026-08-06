@@ -1,1 +1,869 @@
-hello world
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Томсон — Бронирование</title>
+<meta name="description" content="Карточка брони фотостудии Томсон: залы Эдисон, Сфера, Вегас">
+<meta name="theme-color" content="#100E0B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Томсон">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png">
+
+<style>
+:root{
+  --bg:#100E0B;
+  --surface:#1B1815;
+  --surface-2:#242019;
+  --surface-3:#2C2620;
+  --line:#332A1D;
+  --text:#F2ECE1;
+  --text-dim:#A79C89;
+  --text-faint:#6E6455;
+  --gold:#E8B23D;
+  --gold-dim:#8A691F;
+  --blue:#6FD1E8;
+  --blue-dim:#2E5561;
+  --magenta:#E85D9E;
+  --magenta-dim:#7A2C50;
+  --ok:#6FCB8C;
+  --danger:#E86A5D;
+  --accent: var(--gold);
+  --accent-dim: var(--gold-dim);
+  --radius:18px;
+  --radius-sm:12px;
+  font-size:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0;}
+body{
+  background:
+    radial-gradient(1100px 600px at 50% -10%, rgba(232,178,61,0.07), transparent 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  min-height:100vh;
+  padding-bottom:56px;
+}
+::selection{background:var(--accent); color:#1a1509;}
+
+.wrap{max-width:560px; margin:0 auto; padding:20px 16px 40px;}
+
+/* ---------- header ---------- */
+header.top{
+  display:flex; align-items:center; gap:12px;
+  padding:6px 2px 22px;
+}
+.mark{
+  width:40px; height:40px; flex:0 0 auto;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.mark.spin{ transform: rotate(48deg); }
+.mark svg{ display:block; width:100%; height:100%; }
+.mark .blade{ fill: var(--accent); transition: fill .35s ease; }
+.mark .ring{ stroke: var(--accent-dim); transition: stroke .35s ease; }
+.wordmark{ line-height:1.05; }
+.wordmark .name{
+  font-size:19px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--text);
+}
+.wordmark .sub{
+  font-size:12.5px; color:var(--text-faint); letter-spacing:.06em; margin-top:2px;
+}
+
+/* ---------- hall selector ---------- */
+.halls{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  margin-bottom:18px;
+}
+.hall-btn{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:13px 6px 11px;
+  text-align:center;
+  color:var(--text-dim);
+  font-family:inherit;
+  cursor:pointer;
+  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease, color .25s ease;
+}
+.hall-btn .hname{
+  display:block; font-weight:800; font-size:14.5px; letter-spacing:.03em;
+  margin-bottom:3px;
+}
+.hall-btn .hoffice{ display:block; font-size:11px; color:var(--text-faint); letter-spacing:.03em; }
+.hall-btn[data-active="true"]{
+  color:var(--text);
+  background:var(--surface-2);
+}
+.hall-btn[data-hall="edison"][data-active="true"]{ border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset, 0 0 22px -6px var(--gold); }
+.hall-btn[data-hall="sfera"][data-active="true"]{ border-color:var(--blue); box-shadow:0 0 0 1px var(--blue) inset, 0 0 22px -6px var(--blue); }
+.hall-btn[data-hall="vegas"][data-active="true"]{ border-color:var(--magenta); box-shadow:0 0 0 1px var(--magenta) inset, 0 0 22px -6px var(--magenta); }
+.hall-btn[data-hall="edison"][data-active="true"] .hname{ color:var(--gold); }
+.hall-btn[data-hall="sfera"][data-active="true"] .hname{ color:var(--blue); }
+.hall-btn[data-hall="vegas"][data-active="true"] .hname{ color:var(--magenta); }
+
+/* ---------- card ---------- */
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:18px 16px;
+  margin-bottom:14px;
+}
+.card h2{
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.12em;
+  color:var(--text-faint); margin:0 0 14px; font-weight:700;
+}
+.field{ margin-bottom:12px; }
+.field:last-child{ margin-bottom:0; }
+.field label{
+  display:block; font-size:12.5px; color:var(--text-dim); margin-bottom:6px; letter-spacing:.02em;
+}
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.row3{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; }
+input[type=text], input[type=tel], input[type=number], input[type=date], input[type=time]{
+  width:100%;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-family:inherit;
+  font-size:16px;
+  padding:11px 12px;
+  border-radius:10px;
+  outline:none;
+  transition: border-color .2s ease, background .2s ease;
+  -webkit-appearance:none;
+}
+input::placeholder{ color:var(--text-faint); }
+input:focus{ border-color:var(--accent); background:var(--surface-3); }
+input[type=date],input[type=time]{ color-scheme: dark; }
+
+.price-line{
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  font-size:13px; color:var(--text-dim);
+}
+.price-line b{ color:var(--text); font-size:17px; font-weight:800; }
+.price-line .rate{ color:var(--text-faint); font-size:11.5px; }
+
+/* ---------- message blocks ---------- */
+.msg-block{ margin-bottom:14px; }
+.msg-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:8px;
+}
+.msg-head .label{
+  font-size:11.5px; text-transform:uppercase; letter-spacing:.12em;
+  color:var(--text-faint); font-weight:700;
+}
+.msg-head .stage{
+  font-size:10.5px; padding:3px 8px; border-radius:20px;
+  background:var(--surface-2); color:var(--text-dim); border:1px solid var(--line);
+}
+.msg-preview{
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  font-size:13px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  word-break:break-word;
+  color:var(--text-dim);
+  max-height:210px;
+  overflow-y:auto;
+  margin-bottom:10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.msg-preview.expanded{ max-height:none; }
+.expand-toggle{
+  display:block; text-align:center; font-size:12px; color:var(--accent);
+  background:none; border:none; padding:2px 0 10px; cursor:pointer; font-family:inherit;
+}
+.actions{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.actions button{
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:10px 4px 9px; font-family:inherit; font-size:11px;
+  cursor:pointer; transition: border-color .2s ease, transform .1s ease;
+}
+.actions button:active{ transform:scale(.96); }
+.actions button svg{ width:20px; height:20px; }
+.actions button.copy{ border-color:var(--line); }
+.actions button.tg svg{ fill:#4FA9E0; }
+.actions button.wa svg{ fill:#5FD170; }
+.actions button.max svg{ fill:var(--accent); }
+.actions button:hover{ border-color:var(--text-faint); }
+
+.divider{
+  display:flex; align-items:center; gap:10px; margin:22px 0 14px; color:var(--text-faint); font-size:11.5px;
+  letter-spacing:.1em; text-transform:uppercase;
+}
+.divider::before,.divider::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+/* ---------- save / toast ---------- */
+.save-row{ margin-top:4px; }
+.btn-save{
+  width:100%; background:var(--accent); color:#1a1509; border:none;
+  font-family:inherit; font-weight:800; font-size:14px; letter-spacing:.03em;
+  padding:14px; border-radius:12px; cursor:pointer;
+}
+.btn-save:active{ transform:scale(.99); }
+
+.toast{
+  position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
+  background:var(--surface-3); color:var(--text); border:1px solid var(--line);
+  padding:11px 18px; border-radius:30px; font-size:13px;
+  opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  z-index:50; white-space:nowrap;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ---------- history ---------- */
+.hist-toggle{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  background:none; border:none; color:var(--text-dim); font-family:inherit;
+  padding:10px 2px; cursor:pointer; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+}
+.hist-toggle .chev{ transition: transform .25s ease; }
+.hist-toggle[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+.history{ display:none; flex-direction:column; gap:8px; }
+.history.open{ display:flex; }
+.hist-item{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
+  padding:11px 12px; display:flex; align-items:center; gap:10px; cursor:pointer;
+}
+.hist-item .dot{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+.hist-item .info{ flex:1; min-width:0; }
+.hist-item .l1{ font-size:13.5px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hist-item .l2{ font-size:11.5px; color:var(--text-faint); margin-top:2px; }
+.hist-item .del{ background:none; border:none; color:var(--text-faint); font-size:16px; padding:4px 6px; cursor:pointer; }
+.hist-empty{ color:var(--text-faint); font-size:13px; padding:6px 2px 2px; }
+
+.field-error{ border-color:var(--danger) !important; }
+.hint{ font-size:11.5px; color:var(--text-faint); margin-top:5px; }
+
+footer.foot{
+  text-align:center; color:var(--text-faint); font-size:11px; margin-top:26px; letter-spacing:.04em;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="mark" id="logoMark">
+      <svg viewBox="0 0 100 100">
+        <circle class="ring" cx="50" cy="50" r="41" fill="none" stroke-width="2"/>
+        <g id="blades"></g>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <div class="name">Томсон</div>
+      <div class="sub">Карточка брони</div>
+    </div>
+  </header>
+
+  <div class="halls" id="hallSelector">
+    <button class="hall-btn" data-hall="edison" data-active="false">
+      <span class="hname">Эдисон</span>
+      <span class="hoffice">оф. 305</span>
+    </button>
+    <button class="hall-btn" data-hall="sfera" data-active="false">
+      <span class="hname">Сфера</span>
+      <span class="hoffice">оф. 311</span>
+    </button>
+    <button class="hall-btn" data-hall="vegas" data-active="false">
+      <span class="hname">Вегас</span>
+      <span class="hoffice">оф. 304</span>
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>Клиент</h2>
+    <div class="field">
+      <label for="fName">Имя</label>
+      <input type="text" id="fName" placeholder="Как зовут клиента">
+    </div>
+    <div class="field">
+      <label for="fPhone">Телефон</label>
+      <input type="tel" id="fPhone" placeholder="+7 9__ ___-__-__">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="fGuests">Гостей</label>
+        <input type="number" id="fGuests" min="1" max="60" placeholder="напр. 8">
+      </div>
+      <div class="field">
+        <label for="fDate">Дата</label>
+        <input type="date" id="fDate">
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label for="fStart">Время с</label>
+        <input type="time" id="fStart">
+      </div>
+      <div class="field">
+        <label for="fEnd">Время до</label>
+        <input type="time" id="fEnd">
+      </div>
+    </div>
+    <div class="price-line" id="priceLine" style="display:none;">
+      <span class="rate" id="rateNote">—</span>
+      <span><b id="priceTotal">—</b> ₽</span>
+    </div>
+  </div>
+
+  <div class="msg-block">
+    <div class="msg-head">
+      <span class="label">Сообщение клиенту</span>
+      <span class="stage">до оплаты</span>
+    </div>
+    <div class="msg-preview" id="preview1"></div>
+    <button class="expand-toggle" data-target="preview1">развернуть</button>
+    <div class="actions">
+      <button class="copy" data-copy="1"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>Копировать</button>
+      <button class="tg" data-send="tg" data-msg="1"><svg viewBox="0 0 24 24"><path d="M21.05 3.35 2.9 10.36c-1.24.5-1.23 1.19-.23 1.5l4.65 1.45 1.8 5.5c.22.6.36.85.75.85.3 0 .44-.14.6-.3l1.87-1.8 3.9 2.86c.72.4 1.24.2 1.42-.67l2.57-12.1c.28-1.15-.3-1.6-1.12-1.3zM8.5 13.3l9.6-6.05c.48-.3.9-.13.55.17l-8.05 7.27-.3 3.2-1.8-4.6z"/></svg>Telegram</button>
+      <button class="wa" data-send="wa" data-msg="1"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1s-.6.8-.7.9c-.1.1-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1.1-.3 0-.4-.1-.1-.5-1.3-.7-1.7-.2-.5-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.1 1.6 2.5 3.9 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>WhatsApp</button>
+      <button class="max" data-send="max" data-msg="1"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 5.5 4 3 4-3v9h-2v-5.5l-2 1.6-2-1.6V16.5H8z"/></svg>MAX</button>
+    </div>
+  </div>
+
+  <div class="divider">После получения чека</div>
+
+  <div class="msg-block">
+    <div class="msg-head">
+      <span class="label">Подтверждение брони</span>
+      <span class="stage">оплата получена</span>
+    </div>
+    <div class="msg-preview" id="preview2"></div>
+    <button class="expand-toggle" data-target="preview2">развернуть</button>
+    <div class="actions">
+      <button class="copy" data-copy="2"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>Копировать</button>
+      <button class="tg" data-send="tg" data-msg="2"><svg viewBox="0 0 24 24"><path d="M21.05 3.35 2.9 10.36c-1.24.5-1.23 1.19-.23 1.5l4.65 1.45 1.8 5.5c.22.6.36.85.75.85.3 0 .44-.14.6-.3l1.87-1.8 3.9 2.86c.72.4 1.24.2 1.42-.67l2.57-12.1c.28-1.15-.3-1.6-1.12-1.3zM8.5 13.3l9.6-6.05c.48-.3.9-.13.55.17l-8.05 7.27-.3 3.2-1.8-4.6z"/></svg>Telegram</button>
+      <button class="wa" data-send="wa" data-msg="2"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1s-.6.8-.7.9c-.1.1-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1.1-.3 0-.4-.1-.1-.5-1.3-.7-1.7-.2-.5-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.1 1.6 2.5 3.9 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>WhatsApp</button>
+      <button class="max" data-send="max" data-msg="2"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 5.5 4 3 4-3v9h-2v-5.5l-2 1.6-2-1.6V16.5H8z"/></svg>MAX</button>
+    </div>
+  </div>
+
+  <div class="save-row">
+    <button class="btn-save" id="btnSave">Сохранить бронь в историю</button>
+  </div>
+
+  <div class="divider">История броней</div>
+  <button class="hist-toggle" id="histToggle" aria-expanded="false">
+    <span id="histCount">Показать (0)</span>
+    <span class="chev">⌄</span>
+  </button>
+  <div class="history" id="historyList"></div>
+
+  <footer class="foot">Фотостудия Томсон · Красноармейская, 101а</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== ДАННЫЕ ЗАЛОВ ===================== */
+const HALLS = {
+  edison: {
+    name: 'Эдисон', office: '305', accentVar: '--gold',
+    tiers: [ {max:9, price:1600}, {max:15, price:1800}, {max:Infinity, price:2000} ],
+    msg1: (d) => `Фотостудия Томсон
+Зал "Эдисон" 305 офис
+
+Мы ждём Вас
+${d.date}
+с ${d.start} до ${d.end}
+
+Для подтверждения брони, обязательно пришлите чек в этот диалог.
+*Бронь автоматически подтвердится*
+(Чек должен содержать информацию о переводе, дату и номер операции)
+*Предоплата 100%*
+Стоимость:
+1-9 чел/час 1600₽
+10-15 чел/час 1800₽
+16-30 чел/час 2000₽
+
+❗️Внося предоплату Вы соглашаетесь с *ПРАВИЛАМИ и ЦЕНАМИ* фотостудии
+👉http://томсон.рф/pravila_i_cena
+...................................................
+Карта Тинькофф:
+2200700146125280
+Карта Сбербанк:
+2202206203163030
+По номеру:
+ 79234123330
+Держатель - Алексей Геннадьевич Н.
+
+ВАЖНО:
+Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+👞 Подготовьте чистую сменную обувь
+ (у нас можно ходить босиком)
+
+*Адрес и как нас найти:*
+http://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, оф. 305
+❗️Сообщите нам, что передумали, даже если не внесёте предоплату. 
+Мы не снимаем бронь без предупреждения.`,
+    msg2: () => `✅Бронь подтверждена
+Студийный час 55 минут
+Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на осмотр помещения и подготовку зала для следующих клиентов.
+Подготовка фонов и оборудования является частью съемочного процесса. Подготовка моделей, одежды, а также переодевание, также входит в студийный час 55 минут.
+👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком) Подошва должна быть помыта или хорошо протерта.
+
+❗️ Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
+https://томсон.рф/pravila_i_cena
+ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+
+Адрес и как нас найти:
+https://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, 305 офис, зал Эдисон`
+  },
+  sfera: {
+    name: 'Сфера', office: '311', accentVar: '--blue',
+    tiers: [ {max:9, price:1500}, {max:15, price:1700}, {max:Infinity, price:1900} ],
+    msg1: (d) => `Фотостудия Томсон
+Зал "Сфера" 311 офис
+
+Мы ждём Вас
+${d.date}
+с ${d.start} до ${d.end}
+
+Для подтверждения брони, обязательно пришлите чек в этот диалог.
+*Бронь автоматически подтвердится*
+(Чек должен содержать информацию о переводе, дату и номер операции)
+*Предоплата 100%*
+Стоимость:
+1-9 чел/час 1500₽
+10-15 чел/час 1700₽
+16-30 чел/час 1900₽
+
+❗️Внося предоплату Вы соглашаетесь с *ПРАВИЛАМИ и ЦЕНАМИ* фотостудии
+http://томсон.рф/pravila_i_cena
+...................................................
+Карта Тинькофф:
+2200700146125280
+Карта Сбербанк:
+2202206203163030
+По номеру:
+ 79234123330
+Держатель - Алексей Геннадьевич Н.
+
+*Адрес и как нас найти:*
+http://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, оф. 311
+
+ВАЖНО:
+Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+👞 Подготовьте чистую сменную обувь
+ (у нас можно ходить босиком) подошву необходимо заклеить малярным/бумажным скотчем. Вы можете сделать это заранее дома или в студии (малярный скотч предоставляется).
+Мы просим заклеивать только черную подошву, так как она оставляет следы на поверхности циклорамы, даже если обувь новая. 
+❗️Сообщите нам, что передумали, даже если не внесёте предоплату. 
+Мы не снимаем бронь без предупреждения.`,
+    msg2: () => `✅Бронь подтверждена. 
+Студийный час 55 минут. 
+Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на сдачу/приемку помещения и подготовку зала для следующих клиентов.
+Подготовка фонов оборудования моделей, одежды, обуви, а также переодевание является частью съемочного процесса.
+👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком).
+Для съёмок на циклораме, цветную/черную подошву обуви, необходимо заклеить прозрачным или бумажным скотчем. Вы можете сделать это заранее дома или в студии (бумажный скотч предоставляется). обувь может оставляет следы на поверхности циклорамы, даже если она новая. 
+❗️Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
+https://томсон.рф/pravila_i_cena
+ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает.
+📍Адрес и как нас найти:
+https://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, 311 офис, зал Сфера`
+  },
+  vegas: {
+    name: 'Вегас', office: '304', accentVar: '--magenta',
+    tiers: [ {max:5, price:1300}, {max:10, price:1500}, {max:Infinity, price:3000} ],
+    msg1: (d) => `Фотостудия Томсон 
+Зал "Вегас" 304 офис
+
+Мы ждём Вас
+${d.date}
+с ${d.start} до ${d.end}
+
+Для подтверждения брони, обязательно пришлите чек в этот диалог. 
+*Бронь автоматически подтвердится* 
+(Чек должен содержать информацию о переводе, дату и номер операции)   
+
+*Предоплата 100%*
+Стоимость:
+1-5 чел/час 1300₽ 
+6-10 чел/час 1500₽
+11-15 чел/час 3000₽
+
+🔴подробные ПРАВИЛА и ЦЕНЫ тут:
+👉http://томсон.рф/pravila_i_cena
+..........................................................
+
+Карта Сбербанк: 
+ 2202206203163030
+
+Карта Тинькофф: 
+ 2200700791855512
+
+ По номеру: 
+ +79234123330
+
+Держатель - Алексей Н.
+
+❗️Внося предоплату Вы соглашаетесь с правилами фотостудии
+
+ВАЖНО:
+Перенос или отмена возможна не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+
+Кол-во гостей ограничено, подробнее в наших правилах, на сайте студии.
+
+👞 Подготовьте чистую сменную обувь
+ (у нас можно ходить босиком)
+В Зале Вегас нельзя танцевать в обуви на каблуках
+
+Обязательно ознакомьесь с нашими правилами.
+
+Адрес и как нас найти:
+http://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, оф. 304
+
+❗️Сообщите нам, что передумали, даже если не внесёте предоплату.`,
+    msg2: () => `✅Бронь подтверждена
+Студийный час 55 минут
+Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на осмотр помещения и подготовку зала для следующих клиентов.
+Подготовка фонов и оборудования является частью съемочного процесса. Подготовка моделей, одежды, а также переодевание, также входит в студийный час 55 минут.
+👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком) Подошва должна быть помыта или хорошо протерта.
+
+❗️ Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
+https://томсон.рф/pravila_i_cena
+ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+
+Адрес и как нас найти:
+https://томсон.рф/kak-najti
+Ул. Красноармейская, 101а
+3 этаж, 304 офис, зал Вегас`
+  }
+};
+
+/* ===================== СОСТОЯНИЕ ===================== */
+let currentHall = null;
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+const els = {
+  name: $('#fName'), phone: $('#fPhone'), guests: $('#fGuests'),
+  date: $('#fDate'), start: $('#fStart'), end: $('#fEnd'),
+  priceLine: $('#priceLine'), rateNote: $('#rateNote'), priceTotal: $('#priceTotal'),
+  preview1: $('#preview1'), preview2: $('#preview2'),
+  toast: $('#toast'),
+};
+
+/* иконка-диафрагма: рисуем лепестки один раз */
+function buildBlades(){
+  const g = document.getElementById('blades');
+  const cx=50, cy=50, inner=11, outer=41, n=8;
+  let html='';
+  for(let i=0;i<n;i++){
+    const a0 = (2*Math.PI/n)*i;
+    const a1 = a0 + (2*Math.PI/n);
+    const p1 = [cx+inner*Math.cos(a0), cy+inner*Math.sin(a0)];
+    const p2 = [cx+outer*Math.cos(a0+0.12), cy+outer*Math.sin(a0+0.12)];
+    const p3 = [cx+outer*Math.cos(a1-0.02), cy+outer*Math.sin(a1-0.02)];
+    const p4 = [cx+inner*Math.cos(a1), cy+inner*Math.sin(a1)];
+    html += `<polygon class="blade" points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')} ${p4.join(',')}"/>`;
+  }
+  g.innerHTML = html;
+}
+buildBlades();
+
+function setHall(id){
+  currentHall = id;
+  $$('.hall-btn').forEach(b => b.dataset.active = (b.dataset.hall === id) ? 'true' : 'false');
+  const h = HALLS[id];
+  document.documentElement.style.setProperty('--accent', `var(${h.accentVar})`);
+  document.documentElement.style.setProperty('--accent-dim', `var(${h.accentVar}-dim)`);
+  const mark = $('#logoMark');
+  mark.classList.add('spin');
+  setTimeout(()=>mark.classList.remove('spin'), 620);
+  render();
+}
+$$('.hall-btn').forEach(b => b.addEventListener('click', () => setHall(b.dataset.hall)));
+
+/* ===================== ФОРМАТИРОВАНИЕ ===================== */
+function fmtDate(iso){
+  if(!iso) return '__.__.____';
+  const [y,m,d] = iso.split('-');
+  return `${d}.${m}.${y}`;
+}
+function fmtTime(t){ return t ? t : '__:__'; }
+
+function durationHours(start, end){
+  if(!start || !end) return null;
+  const [sh,sm] = start.split(':').map(Number);
+  const [eh,em] = end.split(':').map(Number);
+  let mins = (eh*60+em) - (sh*60+sm);
+  if(mins <= 0) mins += 24*60;
+  return mins/60;
+}
+
+function priceForGuests(hall, guests){
+  const tier = hall.tiers.find(t => guests <= t.max) || hall.tiers[hall.tiers.length-1];
+  return tier.price;
+}
+
+/* ===================== РЕНДЕР ===================== */
+function render(){
+  const hasHall = !!currentHall;
+  els.priceLine.style.display = hasHall ? 'flex' : 'none';
+
+  if(!hasHall){
+    els.preview1.textContent = 'Выберите зал вверху экрана — здесь появится готовый текст для клиента.';
+    els.preview2.textContent = 'Текст подтверждения появится после выбора зала.';
+    return;
+  }
+  const hall = HALLS[currentHall];
+  const data = {
+    date: fmtDate(els.date.value),
+    start: fmtTime(els.start.value),
+    end: fmtTime(els.end.value),
+  };
+  els.preview1.textContent = hall.msg1(data);
+  els.preview2.textContent = hall.msg2(data);
+
+  const guests = parseInt(els.guests.value, 10);
+  if(guests && guests > 0){
+    const rate = priceForGuests(hall, guests);
+    const hrs = durationHours(els.start.value, els.end.value);
+    els.rateNote.textContent = `${rate}₽/час · ${guests} гостей` + (hrs ? ` · ${hrs%1===0?hrs:hrs.toFixed(1)} ч` : '');
+    els.priceTotal.textContent = hrs ? Math.round(rate*hrs) : rate;
+  } else {
+    els.rateNote.textContent = 'укажите число гостей';
+    els.priceTotal.textContent = '—';
+  }
+}
+['input','change'].forEach(evt=>{
+  [els.guests, els.date, els.start, els.end, els.phone, els.name].forEach(el=>{
+    el.addEventListener(evt, render);
+  });
+});
+
+/* разворачивание превью */
+$$('.expand-toggle').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const el = document.getElementById(btn.dataset.target);
+    el.classList.toggle('expanded');
+    btn.textContent = el.classList.contains('expanded') ? 'свернуть' : 'развернуть';
+  });
+});
+
+/* ===================== ВАЛИДАЦИЯ ===================== */
+function clearErrors(){
+  [els.date, els.start, els.end].forEach(el=>el.classList.remove('field-error'));
+}
+function validateCore(){
+  clearErrors();
+  let ok = true;
+  if(!currentHall){ showToast('Сначала выберите зал'); return false; }
+  if(!els.date.value){ els.date.classList.add('field-error'); ok=false; }
+  if(!els.start.value){ els.start.classList.add('field-error'); ok=false; }
+  if(!els.end.value){ els.end.classList.add('field-error'); ok=false; }
+  if(!ok) showToast('Заполните дату и время брони');
+  return ok;
+}
+
+/* ===================== ОТПРАВКА ===================== */
+function normalizePhone(raw){
+  let digits = (raw||'').replace(/\D/g,'');
+  if(digits.length===11 && digits[0]==='8') digits = '7'+digits.slice(1);
+  if(digits.length===10) digits = '7'+digits;
+  return digits;
+}
+
+function showToast(text){
+  els.toast.textContent = text;
+  els.toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(()=> els.toast.classList.remove('show'), 2200);
+}
+
+function getMessageText(which){
+  const hall = HALLS[currentHall];
+  const data = { date: fmtDate(els.date.value), start: fmtTime(els.start.value), end: fmtTime(els.end.value) };
+  return which === '1' ? hall.msg1(data) : hall.msg2(data);
+}
+
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    return true;
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(_){}
+    document.body.removeChild(ta);
+    return true;
+  }
+}
+
+$$('[data-copy]').forEach(btn=>{
+  btn.addEventListener('click', async ()=>{
+    if(!validateCore()) return;
+    const text = getMessageText(btn.dataset.copy);
+    await copyText(text);
+    showToast('Текст скопирован');
+  });
+});
+
+$$('[data-send]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(!validateCore()) return;
+    const which = btn.dataset.msg;
+    const channel = btn.dataset.send;
+    const text = getMessageText(which);
+
+    if(channel === 'wa'){
+      const digits = normalizePhone(els.phone.value);
+      if(digits.length < 10){
+        els.phone.classList.add('field-error');
+        showToast('Укажите телефон клиента для WhatsApp');
+        return;
+      }
+      window.open(`https://wa.me/${digits}?text=${encodeURIComponent(text)}`, '_blank');
+    } else if(channel === 'tg'){
+      window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
+    } else if(channel === 'max'){
+      window.open(`https://max.ru/:share?text=${encodeURIComponent(text)}`, '_blank');
+    }
+    autoSave();
+  });
+});
+
+/* ===================== ИСТОРИЯ (localStorage) ===================== */
+const HIST_KEY = 'tomson_bookings_v1';
+function loadHistory(){
+  try{ return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
+  catch(e){ return []; }
+}
+function saveHistory(list){
+  localStorage.setItem(HIST_KEY, JSON.stringify(list.slice(0,40)));
+}
+function currentBookingObj(){
+  return {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    hall: currentHall,
+    name: els.name.value.trim(),
+    phone: els.phone.value.trim(),
+    guests: els.guests.value,
+    date: els.date.value,
+    start: els.start.value,
+    end: els.end.value,
+    savedAt: new Date().toISOString(),
+  };
+}
+function autoSave(){
+  if(!currentHall || !els.date.value) return;
+  const list = loadHistory();
+  const b = currentBookingObj();
+  // заменяем запись с теми же датой/временем/залом, если уже есть
+  const idx = list.findIndex(x => x.hall===b.hall && x.date===b.date && x.start===b.start && x.end===b.end);
+  if(idx>=0) list[idx] = {...list[idx], ...b, id:list[idx].id};
+  else list.unshift(b);
+  saveHistory(list);
+  renderHistory();
+}
+$('#btnSave').addEventListener('click', ()=>{
+  if(!validateCore()) return;
+  autoSave();
+  showToast('Бронь сохранена в историю');
+});
+
+const dotColor = { edison:'var(--gold)', sfera:'var(--blue)', vegas:'var(--magenta)' };
+
+function renderHistory(){
+  const list = loadHistory();
+  $('#histCount').textContent = `Показать (${list.length})`;
+  const wrap = $('#historyList');
+  if(list.length===0){
+    wrap.innerHTML = '<div class="hist-empty">Пока пусто. Сохранённые брони появятся здесь.</div>';
+    return;
+  }
+  wrap.innerHTML = list.map(b=>{
+    const hall = HALLS[b.hall];
+    const dt = b.date ? fmtDate(b.date) : '—';
+    return `<div class="hist-item" data-id="${b.id}">
+      <span class="dot" style="background:${dotColor[b.hall]||'#888'}"></span>
+      <span class="info">
+        <span class="l1">${b.name || 'Без имени'} · ${hall? hall.name : b.hall}</span>
+        <span class="l2">${dt}, ${b.start||'--:--'}–${b.end||'--:--'} · ${b.phone||'без телефона'}</span>
+      </span>
+      <button class="del" data-del="${b.id}" title="Удалить">✕</button>
+    </div>`;
+  }).join('');
+}
+
+$('#historyList').addEventListener('click', (e)=>{
+  const delId = e.target.dataset && e.target.dataset.del;
+  if(delId){
+    e.stopPropagation();
+    saveHistory(loadHistory().filter(x=>x.id!==delId));
+    renderHistory();
+    return;
+  }
+  const item = e.target.closest('.hist-item');
+  if(!item) return;
+  const b = loadHistory().find(x=>x.id===item.dataset.id);
+  if(!b) return;
+  setHall(b.hall);
+  els.name.value = b.name || '';
+  els.phone.value = b.phone || '';
+  els.guests.value = b.guests || '';
+  els.date.value = b.date || '';
+  els.start.value = b.start || '';
+  els.end.value = b.end || '';
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+  showToast('Бронь загружена в карточку');
+});
+
+const histToggle = $('#histToggle');
+histToggle.addEventListener('click', ()=>{
+  const open = $('#historyList').classList.toggle('open');
+  histToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+
+/* ===================== СТАРТ ===================== */
+(function init(){
+  const today = new Date();
+  const iso = today.toISOString().slice(0,10);
+  els.date.value = iso;
+  renderHistory();
+  render();
+})();
+
+/* ===================== PWA ===================== */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
