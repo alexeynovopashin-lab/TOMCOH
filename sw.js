@@ -1,4 +1,4 @@
-const CACHE = 'tomson-booking-v1';
+const CACHE = 'tomson-booking-v3';
 const ASSETS = [
   './',
   './index.html',

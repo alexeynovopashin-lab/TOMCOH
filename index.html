@@ -4,467 +4,398 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
 <title>Томсон — Бронирование</title>
-<meta name="description" content="Карточка брони фотостудии Томсон: залы Эдисон, Сфера, Вегас">
-<meta name="theme-color" content="#100E0B">
+<meta name="theme-color" content="#eef1f5">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Томсон">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" href="./icon-192.png">
-
 <style>
 :root{
-  --bg:#100E0B;
-  --surface:#1B1815;
-  --surface-2:#242019;
-  --surface-3:#2C2620;
-  --line:#332A1D;
-  --text:#F2ECE1;
-  --text-dim:#A79C89;
-  --text-faint:#6E6455;
-  --gold:#E8B23D;
-  --gold-dim:#8A691F;
-  --blue:#6FD1E8;
-  --blue-dim:#2E5561;
-  --magenta:#E85D9E;
-  --magenta-dim:#7A2C50;
-  --ok:#6FCB8C;
-  --danger:#E86A5D;
-  --accent: var(--gold);
-  --accent-dim: var(--gold-dim);
-  --radius:18px;
-  --radius-sm:12px;
-  font-size:16px;
+  --bg:#eef1f5;
+  --card:#ffffff;
+  --card-2:#f6f8fa;
+  --text:#1c1c1e;
+  --text2:#636366;
+  --text3:#8e8e93;
+  --line: rgba(0,0,0,.05);
+  --accent:#007aff;
+  --accent-soft: rgba(0,122,255,.12);
+  --danger:#ff3b30;
+  --danger-soft: rgba(255,59,48,.10);
+  --ok:#34c759;
+  --shadow-out: 8px 8px 18px rgba(163,177,198,.42), -6px -6px 14px rgba(255,255,255,.9);
+  --shadow-out-sm: 5px 5px 11px rgba(163,177,198,.4), -4px -4px 9px rgba(255,255,255,.95);
+  --shadow-in: inset 4px 4px 9px rgba(163,177,198,.35), inset -4px -4px 9px rgba(255,255,255,.85);
+  --radius:20px;
+  --radius-sm:13px;
+  --radius-lg:26px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{margin:0; padding:0;}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0;}
+html,body{height:100%;}
 body{
-  background:
-    radial-gradient(1100px 600px at 50% -10%, rgba(232,178,61,0.07), transparent 60%),
-    var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  min-height:100vh;
-  padding-bottom:56px;
+  background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
 }
-::selection{background:var(--accent); color:#1a1509;}
+button,input,textarea,select{font:inherit; color:inherit;}
+button{border:0; background:none; cursor:pointer;}
+input,textarea,select{border:0; outline:0; background:none;}
+svg{display:block;}
+.icon{width:20px; height:20px; stroke:currentColor; stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
 
-.wrap{max-width:560px; margin:0 auto; padding:20px 16px 40px;}
+.app{max-width:520px; margin:0 auto; min-height:100dvh; padding-bottom:calc(78px + var(--safe-b)); position:relative;}
 
-/* ---------- header ---------- */
-header.top{
-  display:flex; align-items:center; gap:12px;
-  padding:6px 2px 22px;
+.topbar{
+  position:sticky; top:0; z-index:40;
+  background:rgba(238,241,245,.82);
+  backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px);
+  padding:16px 20px 12px; border-bottom:1px solid var(--line);
 }
-.mark{
-  width:40px; height:40px; flex:0 0 auto;
-  transition: transform .6s cubic-bezier(.2,.8,.2,1);
-}
-.mark.spin{ transform: rotate(48deg); }
-.mark svg{ display:block; width:100%; height:100%; }
-.mark .blade{ fill: var(--accent); transition: fill .35s ease; }
-.mark .ring{ stroke: var(--accent-dim); transition: stroke .35s ease; }
-.wordmark{ line-height:1.05; }
-.wordmark .name{
-  font-size:19px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--text);
-}
-.wordmark .sub{
-  font-size:12.5px; color:var(--text-faint); letter-spacing:.06em; margin-top:2px;
-}
+.topbar h1{font-size:1.4rem; font-weight:800; letter-spacing:-.02em;}
+.topbar .sub{font-size:.76rem; color:var(--text3); font-weight:600; margin-top:1px; letter-spacing:.01em;}
 
-/* ---------- hall selector ---------- */
-.halls{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
-  margin-bottom:18px;
-}
-.hall-btn{
-  position:relative;
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:var(--radius-sm);
-  padding:13px 6px 11px;
-  text-align:center;
-  color:var(--text-dim);
-  font-family:inherit;
-  cursor:pointer;
-  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease, color .25s ease;
-}
-.hall-btn .hname{
-  display:block; font-weight:800; font-size:14.5px; letter-spacing:.03em;
-  margin-bottom:3px;
-}
-.hall-btn .hoffice{ display:block; font-size:11px; color:var(--text-faint); letter-spacing:.03em; }
-.hall-btn[data-active="true"]{
-  color:var(--text);
-  background:var(--surface-2);
-}
-.hall-btn[data-hall="edison"][data-active="true"]{ border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset, 0 0 22px -6px var(--gold); }
-.hall-btn[data-hall="sfera"][data-active="true"]{ border-color:var(--blue); box-shadow:0 0 0 1px var(--blue) inset, 0 0 22px -6px var(--blue); }
-.hall-btn[data-hall="vegas"][data-active="true"]{ border-color:var(--magenta); box-shadow:0 0 0 1px var(--magenta) inset, 0 0 22px -6px var(--magenta); }
-.hall-btn[data-hall="edison"][data-active="true"] .hname{ color:var(--gold); }
-.hall-btn[data-hall="sfera"][data-active="true"] .hname{ color:var(--blue); }
-.hall-btn[data-hall="vegas"][data-active="true"] .hname{ color:var(--magenta); }
+.content{padding:14px 16px 24px;}
+.view{display:none;}
+.view.active{display:block;}
 
-/* ---------- card ---------- */
 .card{
-  background:var(--surface);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:18px 16px;
-  margin-bottom:14px;
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-out);
+  padding:18px; margin-bottom:14px;
 }
-.card h2{
-  font-size:11.5px; text-transform:uppercase; letter-spacing:.12em;
-  color:var(--text-faint); margin:0 0 14px; font-weight:700;
+.card-title{
+  font-size:.72rem; font-weight:700; color:var(--text3); text-transform:uppercase;
+  letter-spacing:.08em; margin-bottom:13px;
 }
-.field{ margin-bottom:12px; }
-.field:last-child{ margin-bottom:0; }
-.field label{
-  display:block; font-size:12.5px; color:var(--text-dim); margin-bottom:6px; letter-spacing:.02em;
-}
-.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.row3{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:10px; }
-input[type=text], input[type=tel], input[type=number], input[type=date], input[type=time]{
-  width:100%;
-  background:var(--surface-2);
-  border:1px solid var(--line);
-  color:var(--text);
-  font-family:inherit;
-  font-size:16px;
-  padding:11px 12px;
-  border-radius:10px;
-  outline:none;
-  transition: border-color .2s ease, background .2s ease;
-  -webkit-appearance:none;
-}
-input::placeholder{ color:var(--text-faint); }
-input:focus{ border-color:var(--accent); background:var(--surface-3); }
-input[type=date],input[type=time]{ color-scheme: dark; }
+.card-title.row{display:flex; align-items:center; justify-content:space-between; margin-bottom:11px;}
 
-.price-line{
-  display:flex; align-items:baseline; justify-content:space-between;
-  margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
-  font-size:13px; color:var(--text-dim);
+/* chips (halls) */
+.chips{display:flex; gap:8px; overflow-x:auto; padding-bottom:2px; margin-bottom:14px; scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex:1 0 auto; min-width:84px; background:var(--card); border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-out-sm); padding:12px 10px; text-align:center; color:var(--text2);
 }
-.price-line b{ color:var(--text); font-size:17px; font-weight:800; }
-.price-line .rate{ color:var(--text-faint); font-size:11.5px; }
+.chip .cn{font-weight:700; font-size:.92rem; display:block;}
+.chip .co{font-size:.68rem; color:var(--text3); margin-top:2px; display:block;}
+.chip.active{box-shadow:var(--shadow-in);}
+.chip .dot{width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle;}
 
-/* ---------- message blocks ---------- */
-.msg-block{ margin-bottom:14px; }
-.msg-head{
-  display:flex; align-items:center; justify-content:space-between;
-  margin-bottom:8px;
+/* fields */
+label{display:block; font-size:.74rem; font-weight:600; color:var(--text3); margin:13px 0 5px;}
+label:first-of-type{margin-top:0;}
+.field{
+  width:100%; background:var(--bg); border-radius:12px; padding:12px 13px;
+  font-size:1rem; box-shadow:var(--shadow-in);
 }
-.msg-head .label{
-  font-size:11.5px; text-transform:uppercase; letter-spacing:.12em;
-  color:var(--text-faint); font-weight:700;
-}
-.msg-head .stage{
-  font-size:10.5px; padding:3px 8px; border-radius:20px;
-  background:var(--surface-2); color:var(--text-dim); border:1px solid var(--line);
-}
-.msg-preview{
-  background:var(--surface-2);
-  border:1px solid var(--line);
-  border-radius:var(--radius-sm);
-  padding:14px;
-  font-size:13px;
-  line-height:1.55;
-  white-space:pre-wrap;
-  word-break:break-word;
-  color:var(--text-dim);
-  max-height:210px;
-  overflow-y:auto;
-  margin-bottom:10px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-.msg-preview.expanded{ max-height:none; }
-.expand-toggle{
-  display:block; text-align:center; font-size:12px; color:var(--accent);
-  background:none; border:none; padding:2px 0 10px; cursor:pointer; font-family:inherit;
-}
-.actions{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-.actions button{
-  display:flex; flex-direction:column; align-items:center; gap:5px;
-  background:var(--surface-2); border:1px solid var(--line); color:var(--text);
-  border-radius:12px; padding:10px 4px 9px; font-family:inherit; font-size:11px;
-  cursor:pointer; transition: border-color .2s ease, transform .1s ease;
-}
-.actions button:active{ transform:scale(.96); }
-.actions button svg{ width:20px; height:20px; }
-.actions button.copy{ border-color:var(--line); }
-.actions button.tg svg{ fill:#4FA9E0; }
-.actions button.wa svg{ fill:#5FD170; }
-.actions button.max svg{ fill:var(--accent); }
-.actions button:hover{ border-color:var(--text-faint); }
+.field:focus{box-shadow: inset 3px 3px 8px rgba(0,122,255,.16), inset -3px -3px 7px rgba(255,255,255,.9);}
+textarea.field{min-height:96px; resize:vertical; line-height:1.5;}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
 
-.divider{
-  display:flex; align-items:center; gap:10px; margin:22px 0 14px; color:var(--text-faint); font-size:11.5px;
-  letter-spacing:.1em; text-transform:uppercase;
-}
-.divider::before,.divider::after{ content:""; flex:1; height:1px; background:var(--line); }
+.seg{display:flex; background:var(--bg); border-radius:12px; padding:3px; box-shadow:var(--shadow-in); gap:2px;}
+.seg button{flex:1; padding:9px 4px; border-radius:9px; font-size:.83rem; font-weight:700; color:var(--text3); text-align:center;}
+.seg button.active{background:var(--card); color:var(--accent); box-shadow:var(--shadow-out-sm);}
 
-/* ---------- save / toast ---------- */
-.save-row{ margin-top:4px; }
-.btn-save{
-  width:100%; background:var(--accent); color:#1a1509; border:none;
-  font-family:inherit; font-weight:800; font-size:14px; letter-spacing:.03em;
-  padding:14px; border-radius:12px; cursor:pointer;
-}
-.btn-save:active{ transform:scale(.99); }
+.status-row{display:flex; gap:8px;}
+.status-btn{flex:1; padding:11px 4px; border-radius:12px; background:var(--bg); box-shadow:var(--shadow-out-sm); font-size:.82rem; font-weight:700; color:var(--text2); text-align:center;}
+.status-btn.active{box-shadow:var(--shadow-in); color:var(--accent); background:var(--accent-soft);}
 
-.toast{
-  position:fixed; left:50%; bottom:22px; transform:translateX(-50%) translateY(20px);
-  background:var(--surface-3); color:var(--text); border:1px solid var(--line);
-  padding:11px 18px; border-radius:30px; font-size:13px;
-  opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  z-index:50; white-space:nowrap;
-}
-.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+.tags{display:flex; flex-wrap:wrap; gap:7px;}
+.tag{width:42px; height:42px; border-radius:12px; background:var(--bg); box-shadow:var(--shadow-out-sm); font-size:1.15rem; display:flex; align-items:center; justify-content:center;}
+.tag.active{box-shadow:var(--shadow-in); background:var(--accent-soft);}
 
-/* ---------- history ---------- */
-.hist-toggle{
-  width:100%; display:flex; align-items:center; justify-content:space-between;
-  background:none; border:none; color:var(--text-dim); font-family:inherit;
-  padding:10px 2px; cursor:pointer; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
-}
-.hist-toggle .chev{ transition: transform .25s ease; }
-.hist-toggle[aria-expanded="true"] .chev{ transform:rotate(180deg); }
-.history{ display:none; flex-direction:column; gap:8px; }
-.history.open{ display:flex; }
-.hist-item{
-  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm);
-  padding:11px 12px; display:flex; align-items:center; gap:10px; cursor:pointer;
-}
-.hist-item .dot{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
-.hist-item .info{ flex:1; min-width:0; }
-.hist-item .l1{ font-size:13.5px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.hist-item .l2{ font-size:11.5px; color:var(--text-faint); margin-top:2px; }
-.hist-item .del{ background:none; border:none; color:var(--text-faint); font-size:16px; padding:4px 6px; cursor:pointer; }
-.hist-empty{ color:var(--text-faint); font-size:13px; padding:6px 2px 2px; }
+.price-hint{font-size:.75rem; color:var(--text3); margin-top:13px; padding:11px 12px; background:var(--bg); border-radius:11px; box-shadow:var(--shadow-in); line-height:1.5; white-space:pre-line;}
 
-.field-error{ border-color:var(--danger) !important; }
-.hint{ font-size:11.5px; color:var(--text-faint); margin-top:5px; }
+.conflict{display:none; align-items:flex-start; gap:10px; background:var(--danger-soft); border-radius:var(--radius-sm); padding:12px 13px; margin-bottom:14px; font-size:.8rem; line-height:1.45; color:#a4160f;}
+.conflict.show{display:flex;}
+.conflict .icon{stroke:var(--danger); flex:0 0 auto; margin-top:1px;}
+.conflict b{color:#7a0e09;}
 
-footer.foot{
-  text-align:center; color:var(--text-faint); font-size:11px; margin-top:26px; letter-spacing:.04em;
+.preview{
+  background:var(--bg); border-radius:14px; padding:14px; font-size:.83rem; line-height:1.55;
+  white-space:pre-wrap; word-break:break-word; max-height:230px; overflow-y:auto; box-shadow:var(--shadow-in); color:var(--text2);
 }
+.btn{display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px; border-radius:14px; font-size:.94rem; font-weight:700; cursor:pointer; color:#fff; margin-top:10px;}
+.btn:active{transform:scale(.97);}
+.btn .icon{stroke:#fff; width:18px; height:18px;}
+.btn-wa{background:linear-gradient(150deg,#2ee06a,#25d366); box-shadow:4px 5px 14px rgba(37,211,102,.35);}
+.btn-tg{background:linear-gradient(150deg,#4fb6ea,#0088cc); box-shadow:4px 5px 14px rgba(0,136,204,.32);}
+.btn-max{background:linear-gradient(150deg,#8f80f8,#6c5ce7); box-shadow:4px 5px 14px rgba(108,92,231,.32);}
+.btn-blue{background:linear-gradient(150deg,#5ac8fa,#007aff); box-shadow:4px 5px 14px rgba(0,122,255,.3);}
+.btn-dark{background:linear-gradient(150deg,#3a3a3c,#1c1c1e); box-shadow:4px 5px 14px rgba(0,0,0,.25);}
+.btn-danger{background:linear-gradient(150deg,#ff6b60,#ff3b30); box-shadow:4px 5px 14px rgba(255,59,48,.3);}
+.btn-ghost{background:var(--card); color:var(--text); box-shadow:var(--shadow-out-sm);}
+.btn-ghost .icon{stroke:var(--text);}
+.btn-sm{padding:10px; font-size:.82rem; margin-top:8px;}
+.btn-row{display:flex; gap:8px;}
+.btn-row .btn{margin-top:0;}
+
+.cal-title-preview{background:var(--bg); border-radius:12px; padding:12px 13px; font-size:.92rem; font-weight:700; box-shadow:var(--shadow-in); word-break:break-word; margin-bottom:2px;}
+.hint{font-size:.72rem; color:var(--text3); margin-top:9px; line-height:1.45;}
+
+/* bottom nav */
+.bottom-nav{
+  position:fixed; bottom:0; left:0; right:0; max-width:520px; margin:0 auto;
+  background:rgba(246,248,250,.9); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-top:1px solid var(--line); display:flex; justify-content:space-around;
+  padding:9px 0 calc(9px + var(--safe-b)); z-index:60;
+}
+.nav-item{display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--text3); font-size:.65rem; font-weight:700; padding:4px 22px;}
+.nav-item .icon{stroke:var(--text3);}
+.nav-item.active{color:var(--accent);}
+.nav-item.active .icon{stroke:var(--accent);}
+
+/* calendar view */
+.date-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.round-btn{width:38px; height:38px; border-radius:50%; background:var(--card); box-shadow:var(--shadow-out-sm); display:flex; align-items:center; justify-content:center;}
+.date-nav .current{font-weight:800; font-size:1rem; text-align:center;}
+.month-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+.dow{color:var(--text3); font-size:.68rem; text-align:center; padding:5px 0; font-weight:700;}
+.day-cell{aspect-ratio:1; border-radius:11px; padding:6px 5px; background:var(--card); box-shadow:var(--shadow-out-sm); display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;}
+.day-cell.muted{opacity:0; pointer-events:none; box-shadow:none; background:transparent;}
+.day-cell.today{box-shadow: inset 0 0 0 2px var(--accent), var(--shadow-out-sm);}
+.day-cell .dn{font-size:.85rem; font-weight:700;}
+.day-cell .dd{display:flex; gap:2px; flex-wrap:wrap; justify-content:center;}
+.day-cell .dd span{width:5px; height:5px; border-radius:50%;}
+
+.booking-item{background:var(--card); border-radius:14px; box-shadow:var(--shadow-out-sm); padding:13px 14px; margin-bottom:9px; display:flex; gap:12px; align-items:flex-start; border-left:4px solid var(--accent);}
+.booking-item .time{font-size:.78rem; font-weight:800; color:var(--text2); min-width:50px; line-height:1.35;}
+.booking-item .info{flex:1; min-width:0;}
+.booking-item .title{font-weight:700; font-size:.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.booking-item .meta{font-size:.73rem; color:var(--text3); margin-top:2px;}
+.booking-item .flags{display:flex; gap:5px; margin-top:6px;}
+.booking-item .flags .icon{width:14px; height:14px; opacity:.25;}
+.booking-item .flags .icon.on{opacity:1; stroke:var(--ok);}
+.empty-state{text-align:center; padding:44px 20px; color:var(--text3); font-size:.88rem; line-height:1.6;}
+
+/* settings */
+.settings-group{margin-bottom:20px;}
+.settings-group h3{font-size:.72rem; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.08em; margin-bottom:9px; padding-left:3px;}
+.settings-row{background:var(--card); border-radius:var(--radius-sm); box-shadow:var(--shadow-out); overflow:hidden;}
+.settings-item{display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border-bottom:1px solid var(--line); gap:12px;}
+.settings-item:last-child{border-bottom:none;}
+.settings-item .label{font-size:.9rem; font-weight:600;}
+.settings-item .label small{display:block; font-size:.72rem; color:var(--text3); font-weight:500; margin-top:1px;}
+.settings-item input{background:transparent; text-align:right; font-size:.88rem; color:var(--accent); width:150px;}
+.settings-item .chev{stroke:var(--text3); width:16px; height:16px; flex:0 0 auto;}
+.color-dot{width:15px; height:15px; border-radius:50%; display:inline-block; margin-right:7px; vertical-align:middle;}
+.hall-row-btn{width:100%; text-align:left;}
+
+/* sheet / overlay */
+.overlay{position:fixed; inset:0; background:rgba(20,22,30,.32); backdrop-filter:blur(3px); z-index:100; display:none; align-items:flex-end; justify-content:center;}
+.overlay.show{display:flex;}
+.sheet{background:var(--bg); border-radius:26px 26px 0 0; width:100%; max-width:520px; max-height:90dvh; overflow-y:auto; padding:12px 18px calc(26px + var(--safe-b)); animation:slideUp .28s cubic-bezier(.2,.9,.3,1);}
+@keyframes slideUp{from{transform:translateY(100%)} to{transform:translateY(0)}}
+.sheet-handle{width:36px; height:5px; background:rgba(0,0,0,.15); border-radius:3px; margin:0 auto 16px;}
+.sheet h2{font-size:1.15rem; font-weight:800; margin-bottom:14px; letter-spacing:-.01em;}
+.sheet-close{position:absolute; top:14px; right:16px; width:32px; height:32px; border-radius:50%; background:var(--card); box-shadow:var(--shadow-out-sm); display:flex; align-items:center; justify-content:center;}
+
+.color-picker{display:flex; gap:9px; flex-wrap:wrap; margin-top:2px;}
+.color-swatch{width:32px; height:32px; border-radius:50%; box-shadow:var(--shadow-out-sm); position:relative;}
+.color-swatch.active::after{content:""; position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--text);}
+
+.tier-row{display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:center; margin-top:8px;}
+.tier-row:first-of-type{margin-top:2px;}
+.icon-btn-sm{width:36px; height:36px; border-radius:10px; background:var(--card); box-shadow:var(--shadow-out-sm); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+
+.toast{position:fixed; bottom:calc(84px + var(--safe-b)); left:50%; transform:translateX(-50%) translateY(80px); background:rgba(28,28,30,.94); color:#fff; padding:12px 20px; border-radius:30px; font-weight:600; font-size:.86rem; z-index:200; transition:transform .3s cubic-bezier(.2,.9,.3,1); box-shadow:0 8px 28px rgba(0,0,0,.25); pointer-events:none; max-width:86vw; text-align:center;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+.field-error{box-shadow: inset 3px 3px 8px rgba(255,59,48,.28), inset -3px -3px 7px rgba(255,255,255,.85) !important;}
+.subnote{font-size:.72rem; color:var(--text3); margin-top:6px; line-height:1.45;}
+.info-box{background:var(--card-2); border-radius:var(--radius-sm); padding:13px 14px; font-size:.8rem; line-height:1.55; color:var(--text2); box-shadow:var(--shadow-in);}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <header class="top">
-    <div class="mark" id="logoMark">
-      <svg viewBox="0 0 100 100">
-        <circle class="ring" cx="50" cy="50" r="41" fill="none" stroke-width="2"/>
-        <g id="blades"></g>
-      </svg>
-    </div>
-    <div class="wordmark">
-      <div class="name">Томсон</div>
-      <div class="sub">Карточка брони</div>
-    </div>
-  </header>
+  <div class="topbar">
+    <h1 id="topTitle">Томсон</h1>
+    <div class="sub" id="topSub">Бронирование</div>
+  </div>
 
-  <div class="halls" id="hallSelector">
-    <button class="hall-btn" data-hall="edison" data-active="false">
-      <span class="hname">Эдисон</span>
-      <span class="hoffice">оф. 305</span>
+  <div class="content">
+
+    <!-- ============ BOOKING VIEW ============ -->
+    <div class="view active" id="view-booking">
+      <div class="chips" id="hallChips"></div>
+
+      <div class="conflict" id="conflictBanner">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        <span id="conflictText"></span>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Клиент</div>
+        <label>Имя</label>
+        <input class="field" type="text" id="fName" placeholder="Анна">
+        <label>Телефон</label>
+        <input class="field" type="tel" id="fPhone" placeholder="+7 923 000-00-00">
+        <label>Гостей</label>
+        <input class="field" type="number" id="fGuests" min="1" max="60" placeholder="5">
+        <div class="row2">
+          <div><label>Дата</label><input class="field" type="date" id="fDate"></div>
+          <div><label>С</label><input class="field" type="time" id="fStart"></div>
+        </div>
+        <label>До</label>
+        <input class="field" type="time" id="fEnd">
+        <div class="price-hint" id="priceHint"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Статус оплаты и теги</div>
+        <div class="status-row" id="payRow">
+          <button class="status-btn" data-pay="none">- ждём</button>
+          <button class="status-btn" data-pay="half">. 50%</button>
+          <button class="status-btn" data-pay="full">.. 100%</button>
+        </div>
+        <label>Теги</label>
+        <div class="tags" id="tagGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="seg" id="msgSeg">
+          <button class="active" data-mtab="1">Сообщение</button>
+          <button data-mtab="2">Подтверждение</button>
+        </div>
+        <div style="margin-top:13px;">
+          <div class="preview" id="msgPreview" contenteditable="true" spellcheck="false"></div>
+          <button class="btn btn-wa" id="btnWa"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0-7.7 13.6L3 21l4.5-1.3A9 9 0 1 0 12 3Z"/><path d="M8.5 8.6c.2-.5.5-.5.8-.5h.6c.2 0 .4 0 .6.4.2.5.7 1.6.7 1.7.1.1.1.3 0 .4-.1.2-.1.3-.3.4-.1.2-.3.3-.4.5-.1.1-.3.3-.1.5.2.4.8 1.2 1.6 2 1.1.9 2 1.2 2.3 1.4.3.1.5.1.6-.1.2-.2.7-.8.9-1 .2-.2.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.4.2.5.3 0 .2 0 .9-.3 1.4-.4.6-1.6 1.2-2.2 1.2-.6 0-1.9-.2-3.7-1.5-2.1-1.6-3.5-3.8-3.6-4Z"/></svg>WhatsApp</button>
+          <button class="btn btn-tg" id="btnTg"><svg class="icon" viewBox="0 0 24 24"><path d="m21 4-3 16.5-6-4.2-3 2.7v-4.2L18.5 6 6 12.3 2 11Z"/></svg>Telegram</button>
+          <button class="btn btn-max" id="btnMax"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 8.5 12 12l4-3.5V16h-2v-4l-2 1.6L10 12v4H8Z"/></svg>MAX</button>
+          <button class="btn btn-ghost" id="btnCopy"><svg class="icon" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Скопировать</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Календарь</div>
+        <div class="cal-title-preview" id="calTitlePreview">—</div>
+        <button class="btn btn-blue" id="btnGCal"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M12 14v4M10 16h4"/></svg>Добавить в Google Календарь</button>
+        <button class="btn btn-dark" id="btnSaveBooking"><svg class="icon" viewBox="0 0 24 24"><path d="M5 5a2 2 0 0 1 2-2h9l3 3v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"/><path d="M8 3v5h8V3M8 21v-7h8v7"/></svg>Сохранить бронь</button>
+        <div class="hint" id="calHint">Откроется черновик события в приложении Google Календарь — останется нажать «Сохранить».</div>
+      </div>
+    </div>
+
+    <!-- ============ CALENDAR VIEW ============ -->
+    <div class="view" id="view-calendar">
+      <div class="seg" id="calSeg" style="margin-bottom:14px;">
+        <button class="active" data-csub="day">День</button>
+        <button data-csub="month">Месяц</button>
+      </div>
+      <div class="chips" id="calHallChips"></div>
+
+      <div id="calDayBlock">
+        <div class="date-nav">
+          <button class="round-btn" id="dayPrev"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="m15 6-6 6 6 6"/></svg></button>
+          <div class="current" id="calDayLabel">Сегодня</div>
+          <button class="round-btn" id="dayNext"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="m9 6 6 6-6 6"/></svg></button>
+        </div>
+        <div id="bookingsList"></div>
+      </div>
+
+      <div id="calMonthBlock" style="display:none;">
+        <div class="date-nav">
+          <button class="round-btn" id="monthPrev"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="m15 6-6 6 6 6"/></svg></button>
+          <div class="current" id="calMonthLabel">Месяц</div>
+          <button class="round-btn" id="monthNext"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="m9 6 6 6-6 6"/></svg></button>
+        </div>
+        <div class="month-grid" id="monthGrid"></div>
+      </div>
+
+      <button class="btn btn-ghost" id="btnOpenGoogleDay" style="margin-top:16px;"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Открыть этот день в Google Календаре</button>
+    </div>
+
+    <!-- ============ SETTINGS VIEW ============ -->
+    <div class="view" id="view-settings">
+      <div class="seg" id="setSeg" style="margin-bottom:16px;">
+        <button class="active" data-stab="studio">Студия</button>
+        <button data-stab="halls">Залы</button>
+        <button data-stab="google">Google</button>
+        <button data-stab="data">Данные</button>
+      </div>
+      <div id="settingsContent"></div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-view="booking">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Бронь
     </button>
-    <button class="hall-btn" data-hall="sfera" data-active="false">
-      <span class="hname">Сфера</span>
-      <span class="hoffice">оф. 311</span>
+    <button class="nav-item" data-view="calendar">
+      <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Календарь
     </button>
-    <button class="hall-btn" data-hall="vegas" data-active="false">
-      <span class="hname">Вегас</span>
-      <span class="hoffice">оф. 304</span>
+    <button class="nav-item" data-view="settings">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>Настройки
     </button>
-  </div>
-
-  <div class="card">
-    <h2>Клиент</h2>
-    <div class="field">
-      <label for="fName">Имя</label>
-      <input type="text" id="fName" placeholder="Как зовут клиента">
-    </div>
-    <div class="field">
-      <label for="fPhone">Телефон</label>
-      <input type="tel" id="fPhone" placeholder="+7 9__ ___-__-__">
-    </div>
-    <div class="row2">
-      <div class="field">
-        <label for="fGuests">Гостей</label>
-        <input type="number" id="fGuests" min="1" max="60" placeholder="напр. 8">
-      </div>
-      <div class="field">
-        <label for="fDate">Дата</label>
-        <input type="date" id="fDate">
-      </div>
-    </div>
-    <div class="row2">
-      <div class="field">
-        <label for="fStart">Время с</label>
-        <input type="time" id="fStart">
-      </div>
-      <div class="field">
-        <label for="fEnd">Время до</label>
-        <input type="time" id="fEnd">
-      </div>
-    </div>
-    <div class="price-line" id="priceLine" style="display:none;">
-      <span class="rate" id="rateNote">—</span>
-      <span><b id="priceTotal">—</b> ₽</span>
-    </div>
-  </div>
-
-  <div class="msg-block">
-    <div class="msg-head">
-      <span class="label">Сообщение клиенту</span>
-      <span class="stage">до оплаты</span>
-    </div>
-    <div class="msg-preview" id="preview1"></div>
-    <button class="expand-toggle" data-target="preview1">развернуть</button>
-    <div class="actions">
-      <button class="copy" data-copy="1"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>Копировать</button>
-      <button class="tg" data-send="tg" data-msg="1"><svg viewBox="0 0 24 24"><path d="M21.05 3.35 2.9 10.36c-1.24.5-1.23 1.19-.23 1.5l4.65 1.45 1.8 5.5c.22.6.36.85.75.85.3 0 .44-.14.6-.3l1.87-1.8 3.9 2.86c.72.4 1.24.2 1.42-.67l2.57-12.1c.28-1.15-.3-1.6-1.12-1.3zM8.5 13.3l9.6-6.05c.48-.3.9-.13.55.17l-8.05 7.27-.3 3.2-1.8-4.6z"/></svg>Telegram</button>
-      <button class="wa" data-send="wa" data-msg="1"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1s-.6.8-.7.9c-.1.1-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1.1-.3 0-.4-.1-.1-.5-1.3-.7-1.7-.2-.5-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.1 1.6 2.5 3.9 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>WhatsApp</button>
-      <button class="max" data-send="max" data-msg="1"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 5.5 4 3 4-3v9h-2v-5.5l-2 1.6-2-1.6V16.5H8z"/></svg>MAX</button>
-    </div>
-  </div>
-
-  <div class="divider">После получения чека</div>
-
-  <div class="msg-block">
-    <div class="msg-head">
-      <span class="label">Подтверждение брони</span>
-      <span class="stage">оплата получена</span>
-    </div>
-    <div class="msg-preview" id="preview2"></div>
-    <button class="expand-toggle" data-target="preview2">развернуть</button>
-    <div class="actions">
-      <button class="copy" data-copy="2"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>Копировать</button>
-      <button class="tg" data-send="tg" data-msg="2"><svg viewBox="0 0 24 24"><path d="M21.05 3.35 2.9 10.36c-1.24.5-1.23 1.19-.23 1.5l4.65 1.45 1.8 5.5c.22.6.36.85.75.85.3 0 .44-.14.6-.3l1.87-1.8 3.9 2.86c.72.4 1.24.2 1.42-.67l2.57-12.1c.28-1.15-.3-1.6-1.12-1.3zM8.5 13.3l9.6-6.05c.48-.3.9-.13.55.17l-8.05 7.27-.3 3.2-1.8-4.6z"/></svg>Telegram</button>
-      <button class="wa" data-send="wa" data-msg="2"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1s-.6.8-.7.9c-.1.1-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1.1-.3 0-.4-.1-.1-.5-1.3-.7-1.7-.2-.5-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3 1 2.5c.1.1 1.6 2.5 3.9 3.4.5.2.9.4 1.3.5.5.2 1 .1 1.3.1.4-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>WhatsApp</button>
-      <button class="max" data-send="max" data-msg="2"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-4 5.5 4 3 4-3v9h-2v-5.5l-2 1.6-2-1.6V16.5H8z"/></svg>MAX</button>
-    </div>
-  </div>
-
-  <div class="save-row">
-    <button class="btn-save" id="btnSave">Сохранить бронь в историю</button>
-  </div>
-
-  <div class="divider">История броней</div>
-  <button class="hist-toggle" id="histToggle" aria-expanded="false">
-    <span id="histCount">Показать (0)</span>
-    <span class="chev">⌄</span>
-  </button>
-  <div class="history" id="historyList"></div>
-
-  <footer class="foot">Фотостудия Томсон · Красноармейская, 101а</footer>
+  </nav>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<div class="overlay" id="sheetOverlay">
+  <div class="sheet" id="sheetBody" style="position:relative;"></div>
+</div>
+
 <script>
-/* ===================== ДАННЫЕ ЗАЛОВ ===================== */
-const HALLS = {
-  edison: {
-    name: 'Эдисон', office: '305', accentVar: '--gold',
-    tiers: [ {max:9, price:1600}, {max:15, price:1800}, {max:Infinity, price:2000} ],
-    msg1: (d) => `Фотостудия Томсон
-Зал "Эдисон" 305 офис
+/* ===================== ИКОНКИ ===================== */
+const ICO = {
+  check:'<svg class="icon" viewBox="0 0 24 24"><path d="m5 13 4 4L19 7"/></svg>',
+  msg:'<svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>',
+  cal:'<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  trash:'<svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+  plus:'<svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  close:'<svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+  chev:'<svg class="chev" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',
+};
+
+/* ===================== ТЕГИ (эмодзи-словарь) ===================== */
+const TAGS = [
+  {e:'💃', l:'Танцы'}, {e:'🔦', l:'Спотнасадка'}, {e:'🧑\u200d🎓', l:'Школьники'},
+  {e:'❗️', l:'Внимание'}, {e:'◾️', l:'Бумажный фон'}, {e:'🌈', l:'Цветной свет'},
+  {e:'⛺️', l:'Детская зона'}, {e:'📸', l:'Фотосессия с нашим фотографом'}, {e:'🪩', l:'Дискошар'},
+  {e:'👰', l:'Невеста'}, {e:'🐕', l:'Собака'}, {e:'🐈', l:'Кошка'},
+  {e:'🍕', l:'Еда'}, {e:'🫖', l:'Чай'}, {e:'🎉', l:'Конфетти/хлопушка'},
+  {e:'📽️', l:'Проектор'}, {e:'⏰', l:'Временная бронь'}, {e:'👶🏻', l:'Младенец'}, {e:'🎤', l:'Микрофон'},
+];
+const PAY_SYMBOL = { none:'-', half:'.', full:'..' };
+const PAY_LABEL = { none:'ждём предоплату', half:'50% предоплата', full:'100% предоплата' };
+const HALL_COLORS = ['#007AFF','#FF9500','#FF2D55','#AF52DE','#34C759','#5AC8FA','#FF3B30','#8E8E93'];
+
+/* ===================== БАЗОВЫЕ ДАННЫЕ ЗАЛОВ (шаблоны по умолчанию) ===================== */
+function defaultHalls(){
+  return [
+    {
+      id:'sfera', name:'Сфера', office:'311', color:'#007AFF', calendarId:'',
+      tiers:[{max:9,price:1500},{max:15,price:1700},{max:999,price:1900}],
+      pricesText:'1-9 чел/час 1500₽\n10-15 чел/час 1700₽\n16-30 чел/час 1900₽',
+      cardsText:'Карта Тинькофф:\n2200700146125280\nКарта Сбербанк:\n2202206203163030\nПо номеру:\n 79234123330\nДержатель - Алексей Геннадьевич Н.',
+      msg1:`Фотостудия Томсон
+Зал "{{зал}}" {{офис}} офис
 
 Мы ждём Вас
-${d.date}
-с ${d.start} до ${d.end}
+{{дата}}
+с {{начало}} до {{конец}}
 
 Для подтверждения брони, обязательно пришлите чек в этот диалог.
 *Бронь автоматически подтвердится*
 (Чек должен содержать информацию о переводе, дату и номер операции)
 *Предоплата 100%*
 Стоимость:
-1-9 чел/час 1600₽
-10-15 чел/час 1800₽
-16-30 чел/час 2000₽
+{{цены}}
 
 ❗️Внося предоплату Вы соглашаетесь с *ПРАВИЛАМИ и ЦЕНАМИ* фотостудии
-👉http://томсон.рф/pravila_i_cena
+{{правила}}
 ...................................................
-Карта Тинькофф:
-2200700146125280
-Карта Сбербанк:
-2202206203163030
-По номеру:
- 79234123330
-Держатель - Алексей Геннадьевич Н.
-
-ВАЖНО:
-Перенос возможен не позднее 48 часов до времени брони.
-При отмене позднее предоплата сгорает. 
-👞 Подготовьте чистую сменную обувь
- (у нас можно ходить босиком)
+{{реквизиты}}
 
 *Адрес и как нас найти:*
-http://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, оф. 305
-❗️Сообщите нам, что передумали, даже если не внесёте предоплату. 
-Мы не снимаем бронь без предупреждения.`,
-    msg2: () => `✅Бронь подтверждена
-Студийный час 55 минут
-Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на осмотр помещения и подготовку зала для следующих клиентов.
-Подготовка фонов и оборудования является частью съемочного процесса. Подготовка моделей, одежды, а также переодевание, также входит в студийный час 55 минут.
-👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком) Подошва должна быть помыта или хорошо протерта.
-
-❗️ Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
-https://томсон.рф/pravila_i_cena
-ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
-При отмене позднее предоплата сгорает. 
-
-Адрес и как нас найти:
-https://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, 305 офис, зал Эдисон`
-  },
-  sfera: {
-    name: 'Сфера', office: '311', accentVar: '--blue',
-    tiers: [ {max:9, price:1500}, {max:15, price:1700}, {max:Infinity, price:1900} ],
-    msg1: (d) => `Фотостудия Томсон
-Зал "Сфера" 311 офис
-
-Мы ждём Вас
-${d.date}
-с ${d.start} до ${d.end}
-
-Для подтверждения брони, обязательно пришлите чек в этот диалог.
-*Бронь автоматически подтвердится*
-(Чек должен содержать информацию о переводе, дату и номер операции)
-*Предоплата 100%*
-Стоимость:
-1-9 чел/час 1500₽
-10-15 чел/час 1700₽
-16-30 чел/час 1900₽
-
-❗️Внося предоплату Вы соглашаетесь с *ПРАВИЛАМИ и ЦЕНАМИ* фотостудии
-http://томсон.рф/pravila_i_cena
-...................................................
-Карта Тинькофф:
-2200700146125280
-Карта Сбербанк:
-2202206203163030
-По номеру:
- 79234123330
-Держатель - Алексей Геннадьевич Н.
-
-*Адрес и как нас найти:*
-http://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, оф. 311
+{{как_найти}}
+{{адрес}}
+{{этаж}}, оф. {{офис}}
 
 ВАЖНО:
 Перенос возможен не позднее 48 часов до времени брони.
@@ -474,30 +405,84 @@ http://томсон.рф/kak-najti
 Мы просим заклеивать только черную подошву, так как она оставляет следы на поверхности циклорамы, даже если обувь новая. 
 ❗️Сообщите нам, что передумали, даже если не внесёте предоплату. 
 Мы не снимаем бронь без предупреждения.`,
-    msg2: () => `✅Бронь подтверждена. 
+      msg2:`✅Бронь подтверждена. 
 Студийный час 55 минут. 
 Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на сдачу/приемку помещения и подготовку зала для следующих клиентов.
 Подготовка фонов оборудования моделей, одежды, обуви, а также переодевание является частью съемочного процесса.
 👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком).
 Для съёмок на циклораме, цветную/черную подошву обуви, необходимо заклеить прозрачным или бумажным скотчем. Вы можете сделать это заранее дома или в студии (бумажный скотч предоставляется). обувь может оставляет следы на поверхности циклорамы, даже если она новая. 
 ❗️Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
-https://томсон.рф/pravila_i_cena
+{{правила}}
 ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
 При отмене позднее предоплата сгорает.
 📍Адрес и как нас найти:
-https://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, 311 офис, зал Сфера`
-  },
-  vegas: {
-    name: 'Вегас', office: '304', accentVar: '--magenta',
-    tiers: [ {max:5, price:1300}, {max:10, price:1500}, {max:Infinity, price:3000} ],
-    msg1: (d) => `Фотостудия Томсон 
-Зал "Вегас" 304 офис
+{{как_найти}}
+{{адрес}}
+{{этаж}}, {{офис}} офис, зал {{зал}}`,
+    },
+    {
+      id:'edison', name:'Эдисон', office:'305', color:'#FF9500', calendarId:'',
+      tiers:[{max:9,price:1600},{max:15,price:1800},{max:999,price:2000}],
+      pricesText:'1-9 чел/час 1600₽\n10-15 чел/час 1800₽\n16-30 чел/час 2000₽',
+      cardsText:'Карта Тинькофф:\n2200700146125280\nКарта Сбербанк:\n2202206203163030\nПо номеру:\n 79234123330\nДержатель - Алексей Геннадьевич Н.',
+      msg1:`Фотостудия Томсон
+Зал "{{зал}}" {{офис}} офис
 
 Мы ждём Вас
-${d.date}
-с ${d.start} до ${d.end}
+{{дата}}
+с {{начало}} до {{конец}}
+
+Для подтверждения брони, обязательно пришлите чек в этот диалог.
+*Бронь автоматически подтвердится*
+(Чек должен содержать информацию о переводе, дату и номер операции)
+*Предоплата 100%*
+Стоимость:
+{{цены}}
+
+❗️Внося предоплату Вы соглашаетесь с *ПРАВИЛАМИ и ЦЕНАМИ* фотостудии
+👉{{правила}}
+...................................................
+{{реквизиты}}
+
+ВАЖНО:
+Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+👞 Подготовьте чистую сменную обувь
+ (у нас можно ходить босиком)
+
+*Адрес и как нас найти:*
+{{как_найти}}
+{{адрес}}
+{{этаж}}, оф. {{офис}}
+❗️Сообщите нам, что передумали, даже если не внесёте предоплату. 
+Мы не снимаем бронь без предупреждения.`,
+      msg2:`✅Бронь подтверждена
+Студийный час 55 минут
+Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на осмотр помещения и подготовку зала для следующих клиентов.
+Подготовка фонов и оборудования является частью съемочного процесса. Подготовка моделей, одежды, а также переодевание, также входит в студийный час 55 минут.
+👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком) Подошва должна быть помыта или хорошо протерта.
+
+❗️ Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
+{{правила}}
+ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
+При отмене позднее предоплата сгорает. 
+
+Адрес и как нас найти:
+{{как_найти}}
+{{адрес}}
+{{этаж}}, {{офис}} офис, зал {{зал}}`,
+    },
+    {
+      id:'vegas', name:'Вегас', office:'304', color:'#FF2D55', calendarId:'',
+      tiers:[{max:5,price:1300},{max:10,price:1500},{max:999,price:3000}],
+      pricesText:'1-5 чел/час 1300₽\n6-10 чел/час 1500₽\n11-15 чел/час 3000₽',
+      cardsText:'Карта Сбербанк: \n 2202206203163030\n\nКарта Тинькофф: \n 2200700791855512\n\n По номеру: \n +79234123330\n\nДержатель - Алексей Н.',
+      msg1:`Фотостудия Томсон 
+Зал "{{зал}}" {{офис}} офис
+
+Мы ждём Вас
+{{дата}}
+с {{начало}} до {{конец}}
 
 Для подтверждения брони, обязательно пришлите чек в этот диалог. 
 *Бронь автоматически подтвердится* 
@@ -505,24 +490,13 @@ ${d.date}
 
 *Предоплата 100%*
 Стоимость:
-1-5 чел/час 1300₽ 
-6-10 чел/час 1500₽
-11-15 чел/час 3000₽
+{{цены}}
 
 🔴подробные ПРАВИЛА и ЦЕНЫ тут:
-👉http://томсон.рф/pravila_i_cena
+👉{{правила}}
 ..........................................................
 
-Карта Сбербанк: 
- 2202206203163030
-
-Карта Тинькофф: 
- 2200700791855512
-
- По номеру: 
- +79234123330
-
-Держатель - Алексей Н.
+{{реквизиты}}
 
 ❗️Внося предоплату Вы соглашаетесь с правилами фотостудии
 
@@ -539,330 +513,708 @@ ${d.date}
 Обязательно ознакомьесь с нашими правилами.
 
 Адрес и как нас найти:
-http://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, оф. 304
+{{как_найти}}
+{{адрес}}
+{{этаж}}, оф. {{офис}}
 
 ❗️Сообщите нам, что передумали, даже если не внесёте предоплату.`,
-    msg2: () => `✅Бронь подтверждена
+      msg2:`✅Бронь подтверждена
 Студийный час 55 минут
 Вы заходите ровно в забронированное время и выходите за 5 минут до его окончания, оставшиеся 5 минут отводятся на осмотр помещения и подготовку зала для следующих клиентов.
 Подготовка фонов и оборудования является частью съемочного процесса. Подготовка моделей, одежды, а также переодевание, также входит в студийный час 55 минут.
 👟 Пожалуйста, подготовьте чистую сменную обувь(можно босиком) Подошва должна быть помыта или хорошо протерта.
 
 ❗️ Внося предоплату Вы соглашаетесь с ПРАВИЛАМИ и ЦЕНАМИ фотостудии
-https://томсон.рф/pravila_i_cena
+{{правила}}
 ВАЖНО: Перенос возможен не позднее 48 часов до времени брони.
 При отмене позднее предоплата сгорает. 
 
 Адрес и как нас найти:
-https://томсон.рф/kak-najti
-Ул. Красноармейская, 101а
-3 этаж, 304 офис, зал Вегас`
-  }
-};
-
-/* ===================== СОСТОЯНИЕ ===================== */
-let currentHall = null;
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-
-const els = {
-  name: $('#fName'), phone: $('#fPhone'), guests: $('#fGuests'),
-  date: $('#fDate'), start: $('#fStart'), end: $('#fEnd'),
-  priceLine: $('#priceLine'), rateNote: $('#rateNote'), priceTotal: $('#priceTotal'),
-  preview1: $('#preview1'), preview2: $('#preview2'),
-  toast: $('#toast'),
-};
-
-/* иконка-диафрагма: рисуем лепестки один раз */
-function buildBlades(){
-  const g = document.getElementById('blades');
-  const cx=50, cy=50, inner=11, outer=41, n=8;
-  let html='';
-  for(let i=0;i<n;i++){
-    const a0 = (2*Math.PI/n)*i;
-    const a1 = a0 + (2*Math.PI/n);
-    const p1 = [cx+inner*Math.cos(a0), cy+inner*Math.sin(a0)];
-    const p2 = [cx+outer*Math.cos(a0+0.12), cy+outer*Math.sin(a0+0.12)];
-    const p3 = [cx+outer*Math.cos(a1-0.02), cy+outer*Math.sin(a1-0.02)];
-    const p4 = [cx+inner*Math.cos(a1), cy+inner*Math.sin(a1)];
-    html += `<polygon class="blade" points="${p1.join(',')} ${p2.join(',')} ${p3.join(',')} ${p4.join(',')}"/>`;
-  }
-  g.innerHTML = html;
+{{как_найти}}
+{{адрес}}
+{{этаж}}, {{офис}} офис, зал {{зал}}`,
+    },
+  ];
 }
-buildBlades();
-
-function setHall(id){
-  currentHall = id;
-  $$('.hall-btn').forEach(b => b.dataset.active = (b.dataset.hall === id) ? 'true' : 'false');
-  const h = HALLS[id];
-  document.documentElement.style.setProperty('--accent', `var(${h.accentVar})`);
-  document.documentElement.style.setProperty('--accent-dim', `var(${h.accentVar}-dim)`);
-  const mark = $('#logoMark');
-  mark.classList.add('spin');
-  setTimeout(()=>mark.classList.remove('spin'), 620);
-  render();
-}
-$$('.hall-btn').forEach(b => b.addEventListener('click', () => setHall(b.dataset.hall)));
-
-/* ===================== ФОРМАТИРОВАНИЕ ===================== */
-function fmtDate(iso){
-  if(!iso) return '__.__.____';
-  const [y,m,d] = iso.split('-');
-  return `${d}.${m}.${y}`;
-}
-function fmtTime(t){ return t ? t : '__:__'; }
-
-function durationHours(start, end){
-  if(!start || !end) return null;
-  const [sh,sm] = start.split(':').map(Number);
-  const [eh,em] = end.split(':').map(Number);
-  let mins = (eh*60+em) - (sh*60+sm);
-  if(mins <= 0) mins += 24*60;
-  return mins/60;
-}
-
-function priceForGuests(hall, guests){
-  const tier = hall.tiers.find(t => guests <= t.max) || hall.tiers[hall.tiers.length-1];
-  return tier.price;
-}
-
-/* ===================== РЕНДЕР ===================== */
-function render(){
-  const hasHall = !!currentHall;
-  els.priceLine.style.display = hasHall ? 'flex' : 'none';
-
-  if(!hasHall){
-    els.preview1.textContent = 'Выберите зал вверху экрана — здесь появится готовый текст для клиента.';
-    els.preview2.textContent = 'Текст подтверждения появится после выбора зала.';
-    return;
-  }
-  const hall = HALLS[currentHall];
-  const data = {
-    date: fmtDate(els.date.value),
-    start: fmtTime(els.start.value),
-    end: fmtTime(els.end.value),
+function defaultCfg(){
+  return {
+    studio:{ name:'Фотостудия Томсон', address:'Ул. Красноармейская, 101а', floor:'3 этаж', rulesUrl:'http://томсон.рф/pravila_i_cena', findUrl:'http://томсон.рф/kak-najti' },
+    halls: defaultHalls(),
   };
-  els.preview1.textContent = hall.msg1(data);
-  els.preview2.textContent = hall.msg2(data);
+}
 
-  const guests = parseInt(els.guests.value, 10);
-  if(guests && guests > 0){
-    const rate = priceForGuests(hall, guests);
-    const hrs = durationHours(els.start.value, els.end.value);
-    els.rateNote.textContent = `${rate}₽/час · ${guests} гостей` + (hrs ? ` · ${hrs%1===0?hrs:hrs.toFixed(1)} ч` : '');
-    els.priceTotal.textContent = hrs ? Math.round(rate*hrs) : rate;
-  } else {
-    els.rateNote.textContent = 'укажите число гостей';
-    els.priceTotal.textContent = '—';
+/* ===================== СОСТОЯНИЕ / ХРАНИЛИЩЕ ===================== */
+const CFG_KEY = 'tomson_cfg_v1';
+const BOOK_KEY = 'tomson_bookings_v3';
+let cfg = loadCfg();
+let bookings = loadBookings();
+
+let view = 'booking';
+let activeHallId = cfg.halls[0]?.id || null;
+let currentPay = 'none';
+let currentTags = new Set();
+let msgTab = '1';
+let editingId = null; // id брони, которая сейчас редактируется в форме (для upsert)
+
+let calSub = 'day';
+let calCursor = new Date();
+let calFilterHall = 'all';
+let monthCursor = new Date();
+
+function loadCfg(){
+  try{
+    const raw = JSON.parse(localStorage.getItem(CFG_KEY));
+    if(raw && raw.halls && raw.halls.length) return raw;
+  }catch(e){}
+  const d = defaultCfg(); localStorage.setItem(CFG_KEY, JSON.stringify(d)); return d;
+}
+function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
+function loadBookings(){
+  try{ return JSON.parse(localStorage.getItem(BOOK_KEY) || '[]'); }catch(e){ return []; }
+}
+function saveBookingsAll(){ localStorage.setItem(BOOK_KEY, JSON.stringify(bookings.slice(0,500))); }
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function hallById(id){ return cfg.halls.find(h=>h.id===id); }
+
+/* ===================== УТИЛИТЫ ФОРМАТА ===================== */
+function fmtDate(iso){ if(!iso) return '__.__.____'; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y}`; }
+function toMinutes(t){ if(!t) return null; const [h,m]=t.split(':').map(Number); return h*60+m; }
+function durationHours(s,e){ if(!s||!e) return null; let mins=toMinutes(e)-toMinutes(s); if(mins<=0) mins+=24*60; return mins/60; }
+function money(n){ return new Intl.NumberFormat('ru-RU').format(Math.round(n)); }
+function priceForGuests(hall,g){ const t = hall.tiers.find(x=>g<=x.max) || hall.tiers[hall.tiers.length-1]; return t? t.price : 0; }
+function normalizePhone(raw){
+  let d=(raw||'').replace(/\D/g,'');
+  if(d.length===11 && d[0]==='8') d='7'+d.slice(1);
+  if(d.length===10) d='7'+d;
+  return d;
+}
+function esc(s){ return String(s??''); }
+
+/* ===================== ШАБЛОНИЗАТОР СООБЩЕНИЙ ===================== */
+function interpolate(tpl, ctx){
+  return tpl.replace(/\{\{(\w+)\}\}/g, (m,k)=> (ctx[k]!==undefined && ctx[k]!==null) ? ctx[k] : '');
+}
+function currentCtx(hall){
+  return {
+    имя: $('#fName').value.trim(),
+    телефон: $('#fPhone').value.trim(),
+    зал: hall.name, офис: hall.office,
+    дата: fmtDate($('#fDate').value),
+    начало: $('#fStart').value || '__:__',
+    конец: $('#fEnd').value || '__:__',
+    гостей: $('#fGuests').value || '',
+    цены: hall.pricesText, реквизиты: hall.cardsText,
+    адрес: cfg.studio.address, этаж: cfg.studio.floor,
+    правила: cfg.studio.rulesUrl, как_найти: cfg.studio.findUrl,
+  };
+}
+function buildMessage(which){
+  const hall = hallById(activeHallId); if(!hall) return '';
+  const tpl = which==='1' ? hall.msg1 : hall.msg2;
+  return interpolate(tpl, currentCtx(hall));
+}
+function buildCalendarTitle(){
+  const emojiPrefix = TAGS.map((t,i)=> currentTags.has(String(i)) ? t.e : null).filter(Boolean).join('');
+  const prefix = emojiPrefix + PAY_SYMBOL[currentPay];
+  const name = $('#fName').value.trim();
+  const phone = $('#fPhone').value.trim();
+  return [prefix, name, phone].filter(Boolean).join(' ');
+}
+
+/* ===================== HALL CHIPS (переиспользуемо) ===================== */
+function renderHallChips(container, activeId, onClick){
+  container.innerHTML = cfg.halls.map(h=>`
+    <button class="chip ${h.id===activeId?'active':''}" data-hid="${h.id}">
+      <span class="cn"><span class="dot" style="background:${h.color}"></span>${h.name}</span>
+      <span class="co">оф. ${h.office}</span>
+    </button>`).join('');
+  container.querySelectorAll('.chip').forEach(btn=>{
+    btn.addEventListener('click', ()=> onClick(btn.dataset.hid));
+  });
+}
+
+/* ===================== BOOKING VIEW ===================== */
+function renderBookingHalls(){
+  renderHallChips($('#hallChips'), activeHallId, (id)=>{ activeHallId=id; renderBooking(); });
+}
+function buildTagGrid(){
+  const wrap = $('#tagGrid');
+  wrap.innerHTML = TAGS.map((t,i)=>`<button type="button" class="tag" data-tag="${i}" title="${t.l}">${t.e}</button>`).join('');
+  wrap.querySelectorAll('.tag').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = btn.dataset.tag;
+      if(currentTags.has(i)) currentTags.delete(i); else currentTags.add(i);
+      btn.classList.toggle('active');
+      renderCalendarTitlePreview();
+    });
+  });
+}
+$('#payRow').addEventListener('click', e=>{
+  const btn = e.target.closest('.status-btn'); if(!btn) return;
+  currentPay = btn.dataset.pay;
+  $$('.status-btn').forEach(b=> b.classList.toggle('active', b===btn));
+  renderCalendarTitlePreview();
+});
+$('#msgSeg').addEventListener('click', e=>{
+  const btn = e.target.closest('button'); if(!btn) return;
+  msgTab = btn.dataset.mtab;
+  $$('#msgSeg button').forEach(b=> b.classList.toggle('active', b===btn));
+  renderMessagePreview();
+});
+['fName','fPhone','fGuests','fDate','fStart','fEnd'].forEach(id=>{
+  $('#'+id).addEventListener('input', ()=>{ renderBooking(); });
+});
+
+function toMinutesSafe(t){ return toMinutes(t); }
+function checkConflict(){
+  const banner = $('#conflictBanner');
+  const date = $('#fDate').value, s = $('#fStart').value, e = $('#fEnd').value;
+  if(!activeHallId || !date || !s || !e){ banner.classList.remove('show'); return; }
+  const sM = toMinutes(s); let eM = toMinutes(e); if(eM<=sM) eM+=24*60;
+  const clash = bookings.find(b=>{
+    if(b.id===editingId) return false;
+    if(b.hallId!==activeHallId || b.date!==date || !b.start || !b.end) return false;
+    let bs=toMinutes(b.start), be=toMinutes(b.end); if(be<=bs) be+=24*60;
+    return sM<be && bs<eM;
+  });
+  if(clash){
+    const hall = hallById(activeHallId);
+    $('#conflictText').innerHTML = `Пересекается с бронью <b>${clash.name||'без имени'}</b> ${clash.start}–${clash.end} в зале «${hall.name}»`;
+    banner.classList.add('show');
+  } else banner.classList.remove('show');
+}
+function renderPriceHint(){
+  const hall = hallById(activeHallId); if(!hall){ $('#priceHint').textContent=''; return; }
+  const g = parseInt($('#fGuests').value,10);
+  let text = `Цены «${hall.name}»:\n${hall.pricesText}`;
+  if(g>0){
+    const rate = priceForGuests(hall,g);
+    const hrs = durationHours($('#fStart').value, $('#fEnd').value);
+    text += `\n\n→ ставка: ${money(rate)}₽/час`;
+    if(hrs) text += ` · ${hrs%1===0?hrs:hrs.toFixed(1)} ч · итого ≈ ${money(rate*hrs)}₽`;
   }
+  $('#priceHint').textContent = text;
 }
-['input','change'].forEach(evt=>{
-  [els.guests, els.date, els.start, els.end, els.phone, els.name].forEach(el=>{
-    el.addEventListener(evt, render);
-  });
-});
-
-/* разворачивание превью */
-$$('.expand-toggle').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const el = document.getElementById(btn.dataset.target);
-    el.classList.toggle('expanded');
-    btn.textContent = el.classList.contains('expanded') ? 'свернуть' : 'развернуть';
-  });
-});
-
-/* ===================== ВАЛИДАЦИЯ ===================== */
-function clearErrors(){
-  [els.date, els.start, els.end].forEach(el=>el.classList.remove('field-error'));
+function renderMessagePreview(){
+  if(!activeHallId){ $('#msgPreview').textContent='Выберите зал.'; return; }
+  $('#msgPreview').textContent = buildMessage(msgTab);
 }
+function renderCalendarTitlePreview(){
+  $('#calTitlePreview').textContent = buildCalendarTitle() || '—';
+}
+function renderBooking(){
+  renderBookingHalls();
+  checkConflict();
+  renderPriceHint();
+  renderMessagePreview();
+  renderCalendarTitlePreview();
+  const hall = hallById(activeHallId);
+  $('#calHint').textContent = hall && hall.calendarId
+    ? `Событие предложат сохранить в календарь «${hall.name}». Останется нажать «Сохранить».`
+    : `Календарь для зала «${hall?hall.name:''}» не привязан — событие откроется в календаре по умолчанию. Привязать можно в Настройках → Залы.`;
+}
+
+/* ===================== ВАЛИДАЦИЯ / TOAST ===================== */
+function showToast(text){
+  const t=$('#toast'); t.textContent=text; t.classList.add('show');
+  clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.classList.remove('show'),2400);
+}
+function clearFieldErrors(){ ['fDate','fStart','fEnd','fName'].forEach(id=> $('#'+id).classList.remove('field-error')); }
 function validateCore(){
-  clearErrors();
+  clearFieldErrors();
+  if(!activeHallId){ showToast('Сначала выберите зал'); return false; }
   let ok = true;
-  if(!currentHall){ showToast('Сначала выберите зал'); return false; }
-  if(!els.date.value){ els.date.classList.add('field-error'); ok=false; }
-  if(!els.start.value){ els.start.classList.add('field-error'); ok=false; }
-  if(!els.end.value){ els.end.classList.add('field-error'); ok=false; }
+  ['fDate','fStart','fEnd'].forEach(id=>{ if(!$('#'+id).value){ $('#'+id).classList.add('field-error'); ok=false; } });
   if(!ok) showToast('Заполните дату и время брони');
   return ok;
 }
 
-/* ===================== ОТПРАВКА ===================== */
-function normalizePhone(raw){
-  let digits = (raw||'').replace(/\D/g,'');
-  if(digits.length===11 && digits[0]==='8') digits = '7'+digits.slice(1);
-  if(digits.length===10) digits = '7'+digits;
-  return digits;
-}
-
-function showToast(text){
-  els.toast.textContent = text;
-  els.toast.classList.add('show');
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(()=> els.toast.classList.remove('show'), 2200);
-}
-
-function getMessageText(which){
-  const hall = HALLS[currentHall];
-  const data = { date: fmtDate(els.date.value), start: fmtTime(els.start.value), end: fmtTime(els.end.value) };
-  return which === '1' ? hall.msg1(data) : hall.msg2(data);
-}
-
+/* ===================== КОПИРОВАНИЕ / ОТПРАВКА ===================== */
 async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    return true;
-  }catch(e){
-    const ta = document.createElement('textarea');
-    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); }catch(_){}
-    document.body.removeChild(ta);
-    return true;
+  try{ await navigator.clipboard.writeText(text); }
+  catch(e){
+    const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} document.body.removeChild(ta);
   }
 }
+function getPreviewText(){ return $('#msgPreview').innerText || $('#msgPreview').textContent; }
 
-$$('[data-copy]').forEach(btn=>{
-  btn.addEventListener('click', async ()=>{
-    if(!validateCore()) return;
-    const text = getMessageText(btn.dataset.copy);
-    await copyText(text);
-    showToast('Текст скопирован');
-  });
+$('#btnCopy').addEventListener('click', async ()=>{
+  if(!validateCore()) return;
+  await copyText(getPreviewText());
+  showToast('Текст скопирован');
+  markFlag(msgTab==='1'?'msg1Sent':'msg2Sent');
+});
+$('#btnWa').addEventListener('click', ()=>{
+  if(!validateCore()) return;
+  const digits = normalizePhone($('#fPhone').value);
+  if(digits.length<10){ $('#fPhone').classList.add('field-error'); showToast('Укажите телефон клиента'); return; }
+  window.open(`https://wa.me/${digits}?text=${encodeURIComponent(getPreviewText())}`, '_blank');
+  afterSend();
+});
+$('#btnTg').addEventListener('click', ()=>{
+  if(!validateCore()) return;
+  window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(getPreviewText())}`, '_blank');
+  afterSend();
+});
+$('#btnMax').addEventListener('click', ()=>{
+  if(!validateCore()) return;
+  window.open(`https://max.ru/:share?text=${encodeURIComponent(getPreviewText())}`, '_blank');
+  afterSend();
+});
+function afterSend(){
+  if(msgTab==='2' && currentPay!=='full'){
+    currentPay='full';
+    $$('.status-btn').forEach(b=> b.classList.toggle('active', b.dataset.pay==='full'));
+    renderCalendarTitlePreview();
+    showToast('Статус оплаты обновлён на 100% — не забудьте обновить событие в календаре');
+  }
+  markFlag(msgTab==='1'?'msg1Sent':'msg2Sent');
+}
+
+/* ===================== GOOGLE КАЛЕНДАРЬ ===================== */
+function toGCalDate(iso,hm){ return iso.replace(/-/g,'')+'T'+hm.replace(':','')+'00'; }
+function gcalUrl(hall, title, startISO, s, endISO, e, details){
+  let url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent(title)
+    + '&dates=' + toGCalDate(startISO,s) + '/' + toGCalDate(endISO,e)
+    + '&details=' + encodeURIComponent(details)
+    + '&location=' + encodeURIComponent(`${cfg.studio.address}, ${cfg.studio.floor}, оф. ${hall.office}`);
+  if(hall.calendarId) url += '&src=' + encodeURIComponent(hall.calendarId);
+  return url;
+}
+$('#btnGCal').addEventListener('click', ()=>{
+  if(!validateCore()) return;
+  if(!$('#fName').value.trim()){ $('#fName').classList.add('field-error'); showToast('Укажите имя клиента'); return; }
+  const hall = hallById(activeHallId);
+  const title = buildCalendarTitle();
+  const startISO = $('#fDate').value; let endISO = startISO;
+  if(toMinutes($('#fEnd').value) <= toMinutes($('#fStart').value)){
+    const d=new Date(startISO); d.setDate(d.getDate()+1); endISO=d.toISOString().slice(0,10);
+  }
+  const guests = $('#fGuests').value ? `${$('#fGuests').value} гостей` : 'не указано';
+  const rate = $('#fGuests').value ? priceForGuests(hall, parseInt($('#fGuests').value,10)) : null;
+  const details = [
+    `Зал: ${hall.name} (оф. ${hall.office})`,
+    `Гостей: ${guests}`,
+    $('#fPhone').value.trim() ? `Телефон: ${$('#fPhone').value.trim()}` : null,
+    `Оплата: ${PAY_LABEL[currentPay]}`,
+    rate ? `Ставка: ${money(rate)}₽/час` : null,
+  ].filter(Boolean).join('\n');
+  window.open(gcalUrl(hall, title, startISO, $('#fStart').value, endISO, $('#fEnd').value, details), '_blank');
+  markFlag('calendarAdded');
+  showToast('Открываю Google Календарь…');
 });
 
-$$('[data-send]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    if(!validateCore()) return;
-    const which = btn.dataset.msg;
-    const channel = btn.dataset.send;
-    const text = getMessageText(which);
-
-    if(channel === 'wa'){
-      const digits = normalizePhone(els.phone.value);
-      if(digits.length < 10){
-        els.phone.classList.add('field-error');
-        showToast('Укажите телефон клиента для WhatsApp');
-        return;
-      }
-      window.open(`https://wa.me/${digits}?text=${encodeURIComponent(text)}`, '_blank');
-    } else if(channel === 'tg'){
-      window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
-    } else if(channel === 'max'){
-      window.open(`https://max.ru/:share?text=${encodeURIComponent(text)}`, '_blank');
-    }
-    autoSave();
-  });
-});
-
-/* ===================== ИСТОРИЯ (localStorage) ===================== */
-const HIST_KEY = 'tomson_bookings_v1';
-function loadHistory(){
-  try{ return JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); }
-  catch(e){ return []; }
-}
-function saveHistory(list){
-  localStorage.setItem(HIST_KEY, JSON.stringify(list.slice(0,40)));
-}
-function currentBookingObj(){
+/* ===================== СОХРАНЕНИЕ БРОНИ ===================== */
+function currentFormBooking(prev){
   return {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-    hall: currentHall,
-    name: els.name.value.trim(),
-    phone: els.phone.value.trim(),
-    guests: els.guests.value,
-    date: els.date.value,
-    start: els.start.value,
-    end: els.end.value,
+    id: (prev&&prev.id) || uid(),
+    hallId: activeHallId,
+    name: $('#fName').value.trim(),
+    phone: $('#fPhone').value.trim(),
+    guests: $('#fGuests').value,
+    date: $('#fDate').value,
+    start: $('#fStart').value,
+    end: $('#fEnd').value,
+    payment: currentPay,
+    tags: Array.from(currentTags),
+    notes: (prev && prev.notes) || '',
+    msg1Sent:(prev&&prev.msg1Sent)||false,
+    msg2Sent:(prev&&prev.msg2Sent)||false,
+    calendarAdded:(prev&&prev.calendarAdded)||false,
     savedAt: new Date().toISOString(),
   };
 }
-function autoSave(){
-  if(!currentHall || !els.date.value) return;
-  const list = loadHistory();
-  const b = currentBookingObj();
-  // заменяем запись с теми же датой/временем/залом, если уже есть
-  const idx = list.findIndex(x => x.hall===b.hall && x.date===b.date && x.start===b.start && x.end===b.end);
-  if(idx>=0) list[idx] = {...list[idx], ...b, id:list[idx].id};
-  else list.unshift(b);
-  saveHistory(list);
-  renderHistory();
+function markFlag(flag){
+  if(!activeHallId || !$('#fDate').value) return;
+  let idx = editingId ? bookings.findIndex(b=>b.id===editingId) : -1;
+  if(idx<0) idx = bookings.findIndex(b=> b.hallId===activeHallId && b.date===$('#fDate').value && b.start===$('#fStart').value && b.end===$('#fEnd').value);
+  const prev = idx>=0 ? bookings[idx] : null;
+  const b = currentFormBooking(prev); b[flag]=true;
+  if(idx>=0) bookings[idx]=b; else bookings.unshift(b);
+  editingId = b.id; saveBookingsAll();
 }
-$('#btnSave').addEventListener('click', ()=>{
+$('#btnSaveBooking').addEventListener('click', ()=>{
   if(!validateCore()) return;
-  autoSave();
-  showToast('Бронь сохранена в историю');
+  if(!$('#fName').value.trim()){ $('#fName').classList.add('field-error'); showToast('Укажите имя клиента'); return; }
+  let idx = editingId ? bookings.findIndex(b=>b.id===editingId) : -1;
+  const prev = idx>=0 ? bookings[idx] : null;
+  const b = currentFormBooking(prev);
+  if(idx>=0) bookings[idx]=b; else bookings.unshift(b);
+  editingId = b.id; saveBookingsAll();
+  showToast('Бронь сохранена');
 });
 
-const dotColor = { edison:'var(--gold)', sfera:'var(--blue)', vegas:'var(--magenta)' };
+function loadBookingIntoForm(b){
+  editingId = b.id;
+  activeHallId = b.hallId;
+  $('#fName').value=b.name||''; $('#fPhone').value=b.phone||'';
+  $('#fGuests').value=b.guests||''; $('#fDate').value=b.date||'';
+  $('#fStart').value=b.start||''; $('#fEnd').value=b.end||'';
+  currentPay = b.payment || 'none';
+  currentTags = new Set(b.tags||[]);
+  $$('.status-btn').forEach(bt=> bt.classList.toggle('active', bt.dataset.pay===currentPay));
+  $$('.tag').forEach(bt=> bt.classList.toggle('active', currentTags.has(bt.dataset.tag)));
+  renderBooking();
+  showView('booking');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function newBookingForm(){
+  editingId = null;
+  $('#fName').value=''; $('#fPhone').value=''; $('#fGuests').value='';
+  currentPay='none'; currentTags=new Set();
+  $$('.status-btn').forEach(bt=> bt.classList.toggle('active', bt.dataset.pay==='none'));
+  $$('.tag').forEach(bt=> bt.classList.remove('active'));
+}
 
-function renderHistory(){
-  const list = loadHistory();
-  $('#histCount').textContent = `Показать (${list.length})`;
-  const wrap = $('#historyList');
-  if(list.length===0){
-    wrap.innerHTML = '<div class="hist-empty">Пока пусто. Сохранённые брони появятся здесь.</div>';
-    return;
-  }
-  wrap.innerHTML = list.map(b=>{
-    const hall = HALLS[b.hall];
-    const dt = b.date ? fmtDate(b.date) : '—';
-    return `<div class="hist-item" data-id="${b.id}">
-      <span class="dot" style="background:${dotColor[b.hall]||'#888'}"></span>
-      <span class="info">
-        <span class="l1">${b.name || 'Без имени'} · ${hall? hall.name : b.hall}</span>
-        <span class="l2">${dt}, ${b.start||'--:--'}–${b.end||'--:--'} · ${b.phone||'без телефона'}</span>
-      </span>
-      <button class="del" data-del="${b.id}" title="Удалить">✕</button>
+/* ===================== CALENDAR VIEW ===================== */
+function isoOf(d){ const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${dd}`; }
+const WEEKDAYS=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const MONTHS=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+
+function renderCalHallChips(){
+  const wrap = $('#calHallChips');
+  const all = [{id:'all', name:'Все', office:'', color:'#8E8E93'}, ...cfg.halls];
+  wrap.innerHTML = all.map(h=>`
+    <button class="chip ${h.id===calFilterHall?'active':''}" data-hid="${h.id}">
+      <span class="cn"><span class="dot" style="background:${h.color}"></span>${h.name}</span>
+    </button>`).join('');
+  wrap.querySelectorAll('.chip').forEach(btn=> btn.addEventListener('click', ()=>{ calFilterHall=btn.dataset.hid; renderCalendar(); }));
+}
+$('#calSeg').addEventListener('click', e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  calSub = btn.dataset.csub;
+  $$('#calSeg button').forEach(b=> b.classList.toggle('active', b===btn));
+  $('#calDayBlock').style.display = calSub==='day' ? '' : 'none';
+  $('#calMonthBlock').style.display = calSub==='month' ? '' : 'none';
+  renderCalendar();
+});
+$('#dayPrev').addEventListener('click', ()=>{ calCursor.setDate(calCursor.getDate()-1); renderCalendar(); });
+$('#dayNext').addEventListener('click', ()=>{ calCursor.setDate(calCursor.getDate()+1); renderCalendar(); });
+$('#monthPrev').addEventListener('click', ()=>{ monthCursor.setMonth(monthCursor.getMonth()-1); renderCalendar(); });
+$('#monthNext').addEventListener('click', ()=>{ monthCursor.setMonth(monthCursor.getMonth()+1); renderCalendar(); });
+$('#btnOpenGoogleDay').addEventListener('click', ()=>{
+  const d = calCursor;
+  window.open(`https://calendar.google.com/calendar/u/0/r/day/${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`, '_blank');
+});
+
+function renderDayList(){
+  const dayStr = isoOf(calCursor);
+  const isToday = isoOf(new Date())===dayStr;
+  $('#calDayLabel').textContent = isToday ? 'Сегодня' : `${WEEKDAYS[(calCursor.getDay()+6)%7]}, ${calCursor.getDate()} ${MONTHS[calCursor.getMonth()]}`;
+  let items = bookings.filter(b=>b.date===dayStr);
+  if(calFilterHall!=='all') items = items.filter(b=>b.hallId===calFilterHall);
+  items.sort((a,b)=> (a.start||'').localeCompare(b.start||''));
+  const box = $('#bookingsList');
+  if(!items.length){ box.innerHTML = `<div class="empty-state">Нет броней на этот день.<br>Сохраняйте карточку кнопкой «Сохранить бронь».</div>`; return; }
+  box.innerHTML = items.map(b=>{
+    const hall = hallById(b.hallId) || {name:b.hallId,color:'#8E8E93',office:''};
+    const tags = (b.tags||[]).map(i=> TAGS[i]?TAGS[i].e:'').join('');
+    const title = `${tags}${PAY_SYMBOL[b.payment]||''} ${b.name||'Без имени'} ${b.phone||''}`.trim();
+    return `<div class="booking-item" style="border-left-color:${hall.color}" data-id="${b.id}">
+      <div class="time">${b.start||'--:--'}<br>–${b.end||'--:--'}</div>
+      <div class="info">
+        <div class="title">${title}</div>
+        <div class="meta">${hall.name} · ${b.guests||'?'} чел.${b.notes? ' · '+b.notes:''}</div>
+        <div class="flags">
+          <span class="icon ${b.msg1Sent?'on':''}">${ICO.msg}</span>
+          <span class="icon ${b.msg2Sent?'on':''}">${ICO.check}</span>
+          <span class="icon ${b.calendarAdded?'on':''}">${ICO.cal}</span>
+        </div>
+      </div>
     </div>`;
   }).join('');
+  box.querySelectorAll('.booking-item').forEach(el=> el.addEventListener('click', ()=> openBookingDetail(el.dataset.id)));
+}
+function renderMonth(){
+  $('#calMonthLabel').textContent = `${MONTHS[monthCursor.getMonth()][0].toUpperCase()+MONTHS[monthCursor.getMonth()].slice(1)} ${monthCursor.getFullYear()}`;
+  const y=monthCursor.getFullYear(), m=monthCursor.getMonth();
+  const first = new Date(y,m,1); const startOffset = (first.getDay()+6)%7;
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const todayISO = isoOf(new Date());
+  let html = WEEKDAYS.map(w=>`<div class="dow">${w}</div>`).join('');
+  for(let i=0;i<startOffset;i++) html += `<div class="day-cell muted"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const date = new Date(y,m,d); const key = isoOf(date);
+    let items = bookings.filter(b=>b.date===key);
+    if(calFilterHall!=='all') items = items.filter(b=>b.hallId===calFilterHall);
+    const dots = items.slice(0,6).map(b=>{ const h=hallById(b.hallId); return `<span style="background:${h?h.color:'#8E8E93'}"></span>`; }).join('');
+    html += `<div class="day-cell ${key===todayISO?'today':''}" data-date="${key}"><span class="dn">${d}</span><span class="dd">${dots}</span></div>`;
+  }
+  $('#monthGrid').innerHTML = html;
+  $('#monthGrid').querySelectorAll('.day-cell[data-date]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      calCursor = new Date(el.dataset.date+'T00:00:00');
+      calSub='day';
+      $$('#calSeg button').forEach(b=> b.classList.toggle('active', b.dataset.csub==='day'));
+      $('#calDayBlock').style.display=''; $('#calMonthBlock').style.display='none';
+      renderCalendar();
+    });
+  });
+}
+function renderCalendar(){
+  renderCalHallChips();
+  if(calSub==='day') renderDayList(); else renderMonth();
 }
 
-$('#historyList').addEventListener('click', (e)=>{
-  const delId = e.target.dataset && e.target.dataset.del;
-  if(delId){
-    e.stopPropagation();
-    saveHistory(loadHistory().filter(x=>x.id!==delId));
-    renderHistory();
-    return;
-  }
-  const item = e.target.closest('.hist-item');
-  if(!item) return;
-  const b = loadHistory().find(x=>x.id===item.dataset.id);
-  if(!b) return;
-  setHall(b.hall);
-  els.name.value = b.name || '';
-  els.phone.value = b.phone || '';
-  els.guests.value = b.guests || '';
-  els.date.value = b.date || '';
-  els.start.value = b.start || '';
-  els.end.value = b.end || '';
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-  showToast('Бронь загружена в карточку');
-});
+function openBookingDetail(id){
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  const hall = hallById(b.hallId) || {name:b.hallId, office:''};
+  const tags = (b.tags||[]).map(i=> TAGS[i]?TAGS[i].e+' '+TAGS[i].l:'').filter(Boolean);
+  openSheet(`
+    <button class="sheet-close" onclick="closeSheet()">${ICO.close}</button>
+    <h2>${esc(b.name)||'Без имени'}</h2>
+    <div class="info-box">
+      <div><b>${PAY_SYMBOL[b.payment]||''} ${esc(b.name)} ${esc(b.phone)}</b></div>
+      <div style="margin-top:6px;">${hall.name} · оф. ${hall.office}</div>
+      <div>${fmtDate(b.date)} · ${b.start}–${b.end}</div>
+      <div>Гостей: ${b.guests||'—'}</div>
+      ${tags.length? `<div style="margin-top:6px;">${tags.join('<br>')}</div>`:''}
+      ${b.notes? `<div style="margin-top:6px;">Заметки: ${esc(b.notes)}</div>`:''}
+    </div>
+    <button class="btn btn-blue" onclick="loadBookingIntoForm(bookings.find(x=>x.id==='${b.id}')); closeSheet();">Открыть в карточке брони</button>
+    <button class="btn btn-danger" onclick="confirmDeleteBooking('${b.id}')">${ICO.trash}Удалить бронь</button>
+  `);
+}
+function confirmDeleteBooking(id){
+  openConfirmSheet('Удалить эту бронь из истории приложения? Событие в Google Календаре (если было создано) нужно будет удалить отдельно.', ()=>{
+    bookings = bookings.filter(x=>x.id!==id); saveBookingsAll(); closeSheet(); renderCalendar(); showToast('Бронь удалена');
+  });
+}
 
-const histToggle = $('#histToggle');
-histToggle.addEventListener('click', ()=>{
-  const open = $('#historyList').classList.toggle('open');
-  histToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+/* ===================== SHEET / OVERLAY / CONFIRM ===================== */
+function openSheet(html){
+  $('#sheetBody').innerHTML = `<div class="sheet-handle"></div>` + html;
+  $('#sheetOverlay').classList.add('show');
+}
+function closeSheet(){ $('#sheetOverlay').classList.remove('show'); }
+$('#sheetOverlay').addEventListener('click', e=>{ if(e.target.id==='sheetOverlay') closeSheet(); });
+function openConfirmSheet(message, onYes){
+  openSheet(`
+    <button class="sheet-close" onclick="closeSheet()">${ICO.close}</button>
+    <h2>Подтвердите действие</h2>
+    <p style="color:var(--text2); font-size:.9rem; line-height:1.5; margin-bottom:16px;">${message}</p>
+    <button class="btn btn-danger" id="confirmYes">Да, продолжить</button>
+    <button class="btn btn-ghost" onclick="closeSheet()">Отмена</button>
+  `);
+  $('#confirmYes').addEventListener('click', onYes);
+}
+
+/* ===================== НАВИГАЦИЯ / ВКЛАДКИ ===================== */
+function showView(name){
+  view = name;
+  $$('.view').forEach(v=> v.classList.remove('active'));
+  $('#view-'+name).classList.add('active');
+  $$('.nav-item').forEach(n=> n.classList.toggle('active', n.dataset.view===name));
+  const titles = { booking:['Томсон','Бронирование'], calendar:['Календарь','Все брони'], settings:['Настройки','Студия, залы, Google'] };
+  $('#topTitle').textContent = titles[name][0];
+  $('#topSub').textContent = titles[name][1];
+  if(name==='calendar') renderCalendar();
+  if(name==='settings') renderSettings();
+  if(name==='booking') renderBooking();
+}
+$$('.nav-item').forEach(btn=> btn.addEventListener('click', ()=> showView(btn.dataset.view)));
+
+/* ===================== SETTINGS ===================== */
+let setTab = 'studio';
+$('#setSeg').addEventListener('click', e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  setTab = btn.dataset.stab;
+  $$('#setSeg button').forEach(b=> b.classList.toggle('active', b===btn));
+  renderSettings();
 });
+function bindCfgInput(id, getter, setter){
+  const el = $('#'+id); el.value = getter();
+  el.addEventListener('change', ()=>{ setter(el.value); saveCfg(); renderBooking(); });
+}
+function renderSettings(){
+  const c = $('#settingsContent');
+  if(setTab==='studio'){
+    c.innerHTML = `
+      <div class="settings-group">
+        <h3>Студия</h3>
+        <div class="settings-row">
+          <div class="settings-item"><span class="label">Название</span><input id="s_name"></div>
+          <div class="settings-item"><span class="label">Адрес</span><input id="s_address"></div>
+          <div class="settings-item"><span class="label">Этаж</span><input id="s_floor"></div>
+          <div class="settings-item"><span class="label">Ссылка на правила</span><input id="s_rules"></div>
+          <div class="settings-item"><span class="label">Ссылка «как найти»</span><input id="s_find"></div>
+        </div>
+        <p class="subnote">Эти значения подставляются в сообщения через {{адрес}}, {{этаж}}, {{правила}}, {{как_найти}}.</p>
+      </div>`;
+    bindCfgInput('s_name', ()=>cfg.studio.name, v=>cfg.studio.name=v);
+    bindCfgInput('s_address', ()=>cfg.studio.address, v=>cfg.studio.address=v);
+    bindCfgInput('s_floor', ()=>cfg.studio.floor, v=>cfg.studio.floor=v);
+    bindCfgInput('s_rules', ()=>cfg.studio.rulesUrl, v=>cfg.studio.rulesUrl=v);
+    bindCfgInput('s_find', ()=>cfg.studio.findUrl, v=>cfg.studio.findUrl=v);
+  }
+  else if(setTab==='halls'){
+    c.innerHTML = `
+      <div class="settings-group">
+        <h3>Залы</h3>
+        <div class="settings-row" id="hallsRow"></div>
+      </div>
+      <button class="btn btn-blue" id="btnAddHall">${ICO.plus}Добавить зал</button>`;
+    $('#hallsRow').innerHTML = cfg.halls.map(h=>`
+      <button class="settings-item hall-row-btn" data-hid="${h.id}">
+        <span class="label"><span class="color-dot" style="background:${h.color}"></span>${h.name}<small>оф. ${h.office} · ${h.calendarId? 'календарь привязан':'календарь не привязан'}</small></span>
+        ${ICO.chev}
+      </button>`).join('');
+    $('#hallsRow').querySelectorAll('.hall-row-btn').forEach(btn=> btn.addEventListener('click', ()=> openHallEditor(btn.dataset.hid)));
+    $('#btnAddHall').addEventListener('click', ()=>{
+      const base = cfg.halls[0];
+      const nh = { id:'hall-'+uid(), name:'Новый зал', office:'', color: HALL_COLORS[cfg.halls.length % HALL_COLORS.length],
+        calendarId:'', tiers:[{max:9,price:1500},{max:15,price:1700},{max:999,price:1900}],
+        pricesText: base? base.pricesText:'1-9 чел/час 1500₽', cardsText: base? base.cardsText:'',
+        msg1: base? base.msg1:'', msg2: base? base.msg2:'' };
+      cfg.halls.push(nh); saveCfg(); renderSettings(); openHallEditor(nh.id);
+    });
+  }
+  else if(setTab==='google'){
+    c.innerHTML = `
+      <div class="settings-group">
+        <h3>Google Календарь</h3>
+        <div class="info-box">
+          Приложение не подключается к Google через OAuth — оно не хранит пароли и не имеет доступа читать ваш календарь напрямую. Вместо этого кнопка «Добавить в Google Календарь» открывает готовый черновик события в приложении Google Календарь, и вы просто нажимаете «Сохранить».<br><br>
+          Если у каждого зала есть отдельный календарь на одном Google-аккаунте (вложенная «ветка»), впишите его Calendar ID в настройках зала — тогда черновик будет сразу открываться в нужном календаре, а не в основном.
+        </div>
+        <p class="subnote" style="margin-top:12px;">Calendar ID обычно выглядит как ваш email (для основного календаря) или как xxxxxxxx@group.calendar.google.com (для дополнительного). Найти его: Google Календарь → Настройки → нужный календарь → «Интеграция» → «ID календаря».</p>
+      </div>
+      <div class="settings-group">
+        <h3>Привязанные календари</h3>
+        <div class="settings-row">
+          ${cfg.halls.map(h=>`<div class="settings-item"><span class="label"><span class="color-dot" style="background:${h.color}"></span>${h.name}</span><span style="font-size:.82rem;color:var(--text3);">${h.calendarId? 'привязан':'—'}</span></div>`).join('')}
+        </div>
+        <p class="subnote">Изменить: Настройки → Залы → нужный зал.</p>
+      </div>`;
+  }
+  else if(setTab==='data'){
+    c.innerHTML = `
+      <div class="settings-group">
+        <h3>Резервная копия</h3>
+        <button class="btn btn-ghost" id="btnExport">Экспортировать данные (.json)</button>
+        <button class="btn btn-ghost" id="btnImportBtn">Импортировать данные (.json)</button>
+        <input type="file" id="fileImport" accept="application/json" style="display:none;">
+      </div>
+      <div class="settings-group">
+        <h3>Опасная зона</h3>
+        <button class="btn btn-danger" id="btnResetAll">${ICO.trash}Сбросить всё к настройкам по умолчанию</button>
+      </div>
+      <p class="hint" style="text-align:center; margin-top:10px;">Томсон · PWA · данные хранятся только на этом устройстве</p>`;
+    $('#btnExport').addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify({cfg,bookings},null,2)], {type:'application/json'});
+      const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='tomson-backup.json'; a.click();
+    });
+    $('#btnImportBtn').addEventListener('click', ()=> $('#fileImport').click());
+    $('#fileImport').addEventListener('change', (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const data = JSON.parse(reader.result);
+          if(data.cfg && data.cfg.halls) { cfg = data.cfg; saveCfg(); }
+          if(Array.isArray(data.bookings)) { bookings = data.bookings; saveBookingsAll(); }
+          activeHallId = cfg.halls[0]?.id || null;
+          showToast('Данные импортированы'); renderSettings(); renderBooking();
+        }catch(err){ showToast('Не удалось прочитать файл'); }
+      };
+      reader.readAsText(file);
+    });
+    $('#btnResetAll').addEventListener('click', ()=>{
+      openConfirmSheet('Все настройки, залы и сохранённые брони будут удалены безвозвратно. Продолжить?', ()=>{
+        localStorage.removeItem(CFG_KEY); localStorage.removeItem(BOOK_KEY);
+        cfg = loadCfg(); bookings = loadBookings(); activeHallId = cfg.halls[0]?.id||null;
+        closeSheet(); showToast('Сброшено'); renderSettings(); renderBooking();
+      });
+    });
+  }
+}
+
+function openHallEditor(hallId){
+  const h = hallById(hallId); if(!h) return;
+  const tiersHtml = h.tiers.map((t,i)=>`
+    <div class="tier-row" data-ti="${i}">
+      <input class="field" type="number" value="${t.max}" placeholder="до N чел" data-tf="max">
+      <input class="field" type="number" value="${t.price}" placeholder="цена ₽/час" data-tf="price">
+      <button class="icon-btn-sm" data-tdel="${i}">${ICO.close}</button>
+    </div>`).join('');
+  openSheet(`
+    <button class="sheet-close" onclick="closeSheet()">${ICO.close}</button>
+    <h2>${esc(h.name)}</h2>
+    <label>Название зала</label><input class="field" id="h_name" value="${esc(h.name)}">
+    <label>Офис</label><input class="field" id="h_office" value="${esc(h.office)}">
+    <label>Цвет</label>
+    <div class="color-picker" id="h_colors">
+      ${HALL_COLORS.map(c=>`<button type="button" class="color-swatch ${c===h.color?'active':''}" style="background:${c}" data-color="${c}"></button>`).join('')}
+    </div>
+    <label>Google Calendar ID (необязательно)</label>
+    <input class="field" id="h_calid" value="${esc(h.calendarId)}" placeholder="xxxxxxxx@group.calendar.google.com">
+    <label>Тарифы (для расчёта стоимости)</label>
+    <div id="h_tiers">${tiersHtml}</div>
+    <button class="btn btn-ghost btn-sm" id="h_addTier">${ICO.plus}Добавить тариф</button>
+    <label>Текст цен для сообщения ({{цены}})</label>
+    <textarea class="field" id="h_pricesText" rows="4">${esc(h.pricesText)}</textarea>
+    <label>Реквизиты для сообщения ({{реквизиты}})</label>
+    <textarea class="field" id="h_cardsText" rows="5">${esc(h.cardsText)}</textarea>
+    <label>Шаблон сообщения до оплаты</label>
+    <textarea class="field" id="h_msg1" rows="10">${esc(h.msg1)}</textarea>
+    <label>Шаблон сообщения-подтверждения</label>
+    <textarea class="field" id="h_msg2" rows="8">${esc(h.msg2)}</textarea>
+    <p class="subnote">Переменные: {{имя}} {{телефон}} {{зал}} {{офис}} {{дата}} {{начало}} {{конец}} {{гостей}} {{цены}} {{реквизиты}} {{адрес}} {{этаж}} {{правила}} {{как_найти}}</p>
+    <button class="btn btn-dark" id="h_save">Сохранить зал</button>
+    ${cfg.halls.length>1 ? `<button class="btn btn-danger" id="h_delete">${ICO.trash}Удалить зал</button>` : ''}
+  `);
+  let selectedColor = h.color;
+  $('#h_colors').querySelectorAll('.color-swatch').forEach(sw=>{
+    sw.addEventListener('click', ()=>{ selectedColor=sw.dataset.color; $$('#h_colors .color-swatch').forEach(x=>x.classList.toggle('active', x===sw)); });
+  });
+  $('#h_addTier').addEventListener('click', ()=>{
+    const wrap = $('#h_tiers'); const div = document.createElement('div');
+    div.className='tier-row'; div.innerHTML = `<input class="field" type="number" placeholder="до N чел" data-tf="max"><input class="field" type="number" placeholder="цена ₽/час" data-tf="price"><button class="icon-btn-sm" data-tdel="new">${ICO.close}</button>`;
+    wrap.appendChild(div);
+    div.querySelector('[data-tdel]').addEventListener('click', ()=> div.remove());
+  });
+  $('#h_tiers').querySelectorAll('[data-tdel]').forEach(btn=> btn.addEventListener('click', ()=> btn.closest('.tier-row').remove()));
+  $('#h_save').addEventListener('click', ()=>{
+    h.name = $('#h_name').value.trim() || h.name;
+    h.office = $('#h_office').value.trim();
+    h.color = selectedColor;
+    h.calendarId = $('#h_calid').value.trim();
+    h.pricesText = $('#h_pricesText').value;
+    h.cardsText = $('#h_cardsText').value;
+    h.msg1 = $('#h_msg1').value;
+    h.msg2 = $('#h_msg2').value;
+    h.tiers = $$('#h_tiers .tier-row').map(row=>({
+      max: parseInt(row.querySelector('[data-tf="max"]').value,10) || 999,
+      price: parseInt(row.querySelector('[data-tf="price"]').value,10) || 0,
+    })).sort((a,b)=>a.max-b.max);
+    saveCfg(); closeSheet(); showToast('Зал сохранён'); renderSettings();
+    if(activeHallId===h.id) renderBooking();
+  });
+  const delBtn = $('#h_delete');
+  if(delBtn) delBtn.addEventListener('click', ()=>{
+    openConfirmSheet(`Удалить зал «${h.name}»? Сохранённые брони этого зала останутся в истории, но зал исчезнет из списка.`, ()=>{
+      cfg.halls = cfg.halls.filter(x=>x.id!==h.id); saveCfg();
+      if(activeHallId===h.id) activeHallId = cfg.halls[0]?.id||null;
+      closeSheet(); showToast('Зал удалён'); renderSettings(); renderBooking();
+    });
+  });
+}
 
 /* ===================== СТАРТ ===================== */
 (function init(){
-  const today = new Date();
-  const iso = today.toISOString().slice(0,10);
-  els.date.value = iso;
-  renderHistory();
-  render();
+  buildTagGrid();
+  $('#fDate').value = isoOf(new Date());
+  $$('.status-btn').forEach(b=> b.classList.toggle('active', b.dataset.pay==='none'));
+  renderBooking();
 })();
 
-/* ===================== PWA ===================== */
 if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 </script>
 </body>
